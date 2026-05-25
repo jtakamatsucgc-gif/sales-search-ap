@@ -1,0 +1,488 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CS事業部ナレッジOS</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#020617;
+  color:white;
+  min-height:100vh;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at top left,#2563eb55,transparent 35%),
+    radial-gradient(circle at bottom right,#7c3aed55,transparent 35%);
+  z-index:-1;
+}
+
+.header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  padding:18px;
+  background:rgba(2,6,23,0.78);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.title{
+  font-size:26px;
+  font-weight:800;
+}
+
+.subtitle{
+  color:#94a3b8;
+  margin-top:5px;
+  font-size:13px;
+}
+
+.container{
+  padding:16px;
+  max-width:780px;
+  margin:auto;
+  padding-bottom:50px;
+}
+
+.hero{
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  border-radius:28px;
+  padding:22px;
+  margin-bottom:16px;
+  box-shadow:0 12px 40px rgba(37,99,235,0.35);
+}
+
+.hero h2{
+  font-size:24px;
+  margin-bottom:9px;
+  line-height:1.35;
+}
+
+.hero p{
+  line-height:1.7;
+  color:rgba(255,255,255,0.92);
+  font-size:14px;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:16px;
+}
+
+.stat{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:22px;
+  padding:16px;
+  backdrop-filter:blur(10px);
+}
+
+.stat-label{
+  color:#94a3b8;
+  font-size:12px;
+}
+
+.stat-value{
+  font-size:30px;
+  font-weight:800;
+  margin-top:6px;
+}
+
+.section{
+  margin-bottom:18px;
+}
+
+.section-title{
+  font-size:20px;
+  font-weight:800;
+  margin:8px 0 12px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.section-title span{
+  font-size:13px;
+  color:#94a3b8;
+  font-weight:500;
+}
+
+.search-box{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-bottom:12px;
+}
+
+input, textarea, select{
+  width:100%;
+  padding:16px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.06);
+  color:white;
+  font-size:16px;
+}
+
+input::placeholder,
+textarea::placeholder{
+  color:#94a3b8;
+}
+
+select option{
+  color:#111827;
+}
+
+.main-btn{
+  border:none;
+  border-radius:20px;
+  padding:16px;
+  font-size:16px;
+  font-weight:800;
+  background:linear-gradient(135deg,#3b82f6,#8b5cf6);
+  color:white;
+  cursor:pointer;
+}
+
+.sub-btn{
+  border:none;
+  border-radius:18px;
+  padding:14px;
+  font-size:15px;
+  font-weight:700;
+  background:rgba(255,255,255,0.08);
+  color:white;
+  cursor:pointer;
+}
+
+.card{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:26px;
+  padding:20px;
+  margin-bottom:12px;
+  backdrop-filter:blur(14px);
+  box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+.tag{
+  display:inline-block;
+  background:rgba(59,130,246,0.18);
+  color:#93c5fd;
+  border-radius:999px;
+  padding:6px 12px;
+  font-size:12px;
+  margin-bottom:12px;
+}
+
+.card-title{
+  font-size:20px;
+  font-weight:800;
+  margin-bottom:12px;
+}
+
+.answer{
+  line-height:1.85;
+  color:#e2e8f0;
+  white-space:pre-line;
+  font-size:15px;
+}
+
+.notice{
+  margin-top:14px;
+  color:#94a3b8;
+  font-size:13px;
+}
+
+.admin-grid{
+  display:grid;
+  gap:10px;
+}
+
+.compact-list{
+  max-height:260px;
+  overflow:auto;
+  padding-right:2px;
+}
+
+.divider{
+  height:1px;
+  background:rgba(255,255,255,0.08);
+  margin:18px 0;
+}
+
+@media (min-width:760px){
+  .two-col{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    align-items:start;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <div class="title">CS事業部ナレッジOS</div>
+  <div class="subtitle">営業現場 即答支援システム</div>
+</div>
+
+<div class="container">
+
+  <div class="hero">
+    <h2 id="heroTitle">即答できる営業は信頼される。</h2>
+    <p id="heroText">現場の知識を、会社の資産へ。</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">登録ナレッジ</div>
+      <div class="stat-value" id="knowledgeCount">0</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">未回答質問</div>
+      <div class="stat-value" id="requestCount">0</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">検索 <span>現場で即確認</span></div>
+
+    <div class="search-box">
+      <input id="searchInput" placeholder="例：違約金 / 法人契約 / 動力">
+      <button class="main-btn" onclick="searchKnowledge()">検索する</button>
+    </div>
+
+    <div id="results"></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="two-col">
+
+    <div class="section">
+      <div class="section-title">管理 <span>回答を追加</span></div>
+
+      <div class="card">
+        <div class="admin-grid">
+
+          <input id="newKeyword" placeholder="キーワード">
+
+          <select id="newCategory">
+            <option>契約</option>
+            <option>法人</option>
+            <option>設備</option>
+            <option>支払い</option>
+            <option>工事</option>
+            <option>解約</option>
+          </select>
+
+          <textarea id="newAnswer" rows="5" placeholder="回答内容"></textarea>
+
+          <textarea id="newNotice" rows="3" placeholder="注意点"></textarea>
+
+          <button class="main-btn" onclick="addKnowledge()">追加する</button>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">未回答 <span>現場の詰まり</span></div>
+      <div id="requestList" class="compact-list"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+const heroMessages = [
+  {title:"即答できる営業は信頼される。", text:"現場の知識を、会社の資産へ。"},
+  {title:"今日の1件が流れを変える。", text:"迷う前に検索。止まる前に確認。"},
+  {title:"止まらない営業が、最も件数を積む。", text:"現場対応速度が、数字を変える。"},
+  {title:"トップ営業は確認を後回しにしない。", text:"即確認、即提案、即前進。"},
+  {title:"成約率は“知識差”で決まる。", text:"知っている営業は、強い。"},
+  {title:"最後の1件まで勝負。", text:"後半の踏み込みが数字を変える。"},
+  {title:"個人技を、組織力に変える。", text:"現場で生まれた知識を全員へ。"},
+  {title:"迷った方が負ける。まず踏み込め。", text:"確認速度が営業速度。"}
+];
+
+let lastIndex = localStorage.getItem("lastHeroIndex");
+let randomIndex;
+
+do{
+  randomIndex = Math.floor(Math.random() * heroMessages.length);
+}while(String(randomIndex) === lastIndex && heroMessages.length > 1);
+
+localStorage.setItem("lastHeroIndex", randomIndex);
+
+window.addEventListener("DOMContentLoaded", () => {
+  const randomMessage = heroMessages[randomIndex];
+  document.getElementById("heroTitle").innerText = randomMessage.title;
+  document.getElementById("heroText").innerText = randomMessage.text;
+});
+
+let knowledge = JSON.parse(localStorage.getItem("knowledgeDB")) || [
+{
+  keyword:"違約金",
+  category:"契約",
+  answer:"・供給開始から1年以内は違約金発生\n・引越し解約は対象外",
+  notice:"旧プランは別条件の可能性あり"
+}
+];
+
+let requests = JSON.parse(localStorage.getItem("requestDB")) || [];
+
+function saveData(){
+  localStorage.setItem("knowledgeDB", JSON.stringify(knowledge));
+  localStorage.setItem("requestDB", JSON.stringify(requests));
+  updateStats();
+  renderRequests();
+}
+
+function updateStats(){
+  document.getElementById("knowledgeCount").innerText = knowledge.length;
+  document.getElementById("requestCount").innerText = requests.length;
+}
+
+function searchKnowledge(){
+  const input = document.getElementById("searchInput").value.toLowerCase().trim();
+  const results = document.getElementById("results");
+
+  const filtered = knowledge.filter(item =>
+    item.keyword.toLowerCase().includes(input) ||
+    item.answer.toLowerCase().includes(input) ||
+    item.category.toLowerCase().includes(input)
+  );
+
+  if(filtered.length === 0){
+    results.innerHTML = `
+    <div class="card">
+      <div class="card-title">該当なし</div>
+      <div class="answer">この質問はまだ登録されていません。</div>
+      <br>
+      <button class="main-btn" onclick="submitRequest('${input.replace(/'/g, "\\'")}')">
+        この質問を送信
+      </button>
+    </div>
+    `;
+    return;
+  }
+
+  results.innerHTML = filtered.map(item => `
+    <div class="card">
+      <div class="tag">${item.category}</div>
+      <div class="card-title">${item.keyword}</div>
+      <div class="answer">${item.answer}</div>
+      <div class="notice">注意点：${item.notice || "なし"}</div>
+    </div>
+  `).join("");
+}
+
+function addKnowledge(){
+  const keyword = document.getElementById("newKeyword").value.trim();
+  const category = document.getElementById("newCategory").value;
+  const answer = document.getElementById("newAnswer").value.trim();
+  const notice = document.getElementById("newNotice").value.trim();
+
+  if(!keyword || !answer){
+    alert("キーワードと回答を入力してください");
+    return;
+  }
+
+  knowledge.unshift({keyword, category, answer, notice});
+  saveData();
+
+  document.getElementById("newKeyword").value = "";
+  document.getElementById("newAnswer").value = "";
+  document.getElementById("newNotice").value = "";
+
+  alert("追加しました");
+  searchKnowledge();
+}
+
+async function submitRequest(text){
+  if(!text){
+    alert("検索欄に質問を入力してください");
+    return;
+  }
+
+  const SCRIPT_URL = "ここにGoogle Apps ScriptのURLを入れる";
+
+  const payload = {
+    question:text,
+    date:new Date().toLocaleString(),
+    source:"CS事業部ナレッジOS",
+    userAgent:navigator.userAgent
+  };
+
+  requests.unshift(payload);
+  saveData();
+
+  if(SCRIPT_URL === "ここにGoogle Apps ScriptのURLを入れる"){
+    alert("質問を端末内に保存しました。Apps Script URLを設定するとスプレッドシートにも送信できます。");
+    return;
+  }
+
+  try{
+    await fetch(SCRIPT_URL,{
+      method:"POST",
+      mode:"no-cors",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload)
+    });
+    alert("質問を送信しました");
+  }catch(error){
+    alert("送信に失敗しました。端末内には保存されています。");
+  }
+}
+
+function renderRequests(){
+  const requestList = document.getElementById("requestList");
+
+  if(requests.length === 0){
+    requestList.innerHTML = `
+    <div class="card">
+      <div class="card-title">未回答質問はありません</div>
+      <div class="notice">該当なしの質問が送信されるとここに表示されます。</div>
+    </div>
+    `;
+    return;
+  }
+
+  requestList.innerHTML = requests.map(item => `
+    <div class="card">
+      <div class="card-title">${item.question}</div>
+      <div class="notice">${item.date}</div>
+    </div>
+  `).join("");
+}
+
+updateStats();
+renderRequests();
+searchKnowledge();
+</script>
+
+</body>
+</html>

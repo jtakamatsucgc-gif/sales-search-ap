@@ -6,10 +6,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>CGC FIELD ANSWER</title>
+<meta name="apple-mobile-web-app-title" content="CGC FIELD ANSWER">
+<meta name="theme-color" content="#03122f">
 
 <script>
-const SUPABASE_URL = 'YOUR_SUPABASE_URL'
-const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY'
+const SUPABASE_URL = 'https://aknclbhplcplkgbktfkw.supabase.co'
+const SUPABASE_KEY = 'sb_publishable_Hsc_-eDUTO96dWQSIfXU1A_SjuWRNjg'
 const ADMIN_PASSWORD = 'cgc12345'
 
 const supabaseClient = supabase.createClient(
@@ -19,595 +21,308 @@ const supabaseClient = supabase.createClient(
 </script>
 
 <style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
 body{
-  font-family:-apple-system,sans-serif;
-  background:#f5f7fb;
-  margin:0;
-  color:#111827;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#f8fafc;
+  color:#0f172a;
+  min-height:100vh;
+  line-height:1.6;
+  padding-bottom:92px;
 }
+button,input,textarea,select{font-family:inherit}
+button{cursor:pointer}
+.app{min-height:100vh;display:grid;grid-template-columns:260px 1fr;background:#f8fafc}
+.sidebar{
+  background:linear-gradient(180deg,#03122f,#062a66 55%,#021024);
+  color:white;padding:28px 18px;display:flex;flex-direction:column;gap:26px;
+  position:sticky;top:0;height:100vh;box-shadow:18px 0 60px rgba(15,23,42,.12)
+}
+.brand-mark{width:130px;height:98px;position:relative;margin-left:2px}
+.brand-mark::before{content:"";position:absolute;width:68px;height:68px;left:2px;top:0;border-radius:50%;border:12px solid #facc15;border-right-color:transparent;border-bottom-color:transparent;transform:rotate(-18deg);filter:drop-shadow(0 8px 18px rgba(250,204,21,.28))}
+.brand-mark::after{content:"FA";position:absolute;left:24px;top:38px;font-family:'Arial Narrow','Space Grotesk',Inter,sans-serif;font-size:58px;line-height:.72;font-weight:1000;font-style:italic;color:#fff;letter-spacing:-.22em;text-shadow:0 12px 22px rgba(0,0,0,.28)}
+.brand-name{font-size:28px;font-weight:1000;line-height:1.05;letter-spacing:-.04em;margin-top:4px}
+.nav{display:grid;gap:10px}
+.nav-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;color:#dbeafe;font-weight:800;font-size:15px;text-decoration:none}
+.nav-item.active,.nav-item:hover{background:linear-gradient(135deg,#0b63ff,#1447d8);color:#fff;box-shadow:0 14px 34px rgba(37,99,235,.35)}
+.nav-icon{font-size:20px;width:24px;text-align:center}
+.help-card{margin-top:auto;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);border-radius:18px;padding:16px}
+.help-card b{display:block;font-size:13px;margin-bottom:8px}.help-card p{font-size:13px;color:#dbeafe}
 
-header{
-  background:#03122f;
-  color:white;
-  padding:24px;
-}
+.main{padding:28px 32px 40px;background:radial-gradient(circle at top right,rgba(37,99,235,.12),transparent 35%),linear-gradient(180deg,#fff,#f8fafc)}
+.topbar{display:flex;justify-content:flex-end;gap:16px;margin-bottom:18px}
+.top-icon{width:38px;height:38px;border-radius:50%;border:1px solid #dbe3ef;display:grid;place-items:center;background:#fff;color:#0f172a;font-weight:900;position:relative}
+.badge{position:absolute;top:-5px;right:-5px;background:#ef4444;color:white;font-size:11px;min-width:20px;height:20px;border-radius:50%;display:grid;place-items:center;padding:0 5px}
 
-.hero{
-  font-size:14px;
-  opacity:0.8;
-  margin-top:10px;
-}
+.hero{position:relative;overflow:hidden;border-radius:24px;min-height:300px;background:linear-gradient(90deg,#03122f 0%,#07245b 44%,rgba(7,36,91,.78) 64%,rgba(255,255,255,.05) 100%),radial-gradient(circle at 62% 62%,rgba(59,130,246,.55),transparent 28%);padding:44px 44px 28px;color:white;box-shadow:0 26px 70px rgba(15,23,42,.18);border:1px solid rgba(37,99,235,.18)}
+.hero::before{content:"";position:absolute;right:0;top:0;width:44%;height:100%;background:linear-gradient(90deg,rgba(3,18,47,.45),transparent 30%),radial-gradient(circle at 55% 35%,rgba(255,255,255,.28),transparent 18%);opacity:.9}
+.hero::after{content:"";position:absolute;right:38%;bottom:-18px;width:360px;height:210px;background:radial-gradient(circle,#1d4ed8 0,transparent 68%);filter:blur(34px);opacity:.75}
+.hero-brand{position:relative;z-index:2;display:flex;align-items:center;gap:22px;margin-bottom:10px}
+.hero-logo{width:108px;height:92px;position:relative;flex:0 0 auto}
+.hero-logo::before{content:"";position:absolute;width:62px;height:62px;left:0;top:2px;border-radius:50%;border:11px solid #facc15;border-right-color:transparent;border-bottom-color:transparent;transform:rotate(-18deg)}
+.hero-logo::after{content:"FA";position:absolute;left:23px;top:35px;color:white;font-size:52px;line-height:.72;font-weight:1000;font-style:italic;letter-spacing:-.22em;font-family:'Arial Narrow','Space Grotesk',Inter,sans-serif}
+.hero-title{font-size:44px;line-height:1;font-weight:1000;letter-spacing:-.055em}.hero-title span{color:#facc15}
+.hero-sub{position:relative;z-index:2;font-size:18px;font-weight:700;margin:12px 0 26px;color:#e0f2fe}
 
-.container{
-  padding:16px;
-}
+.search-box{position:relative;z-index:2;max-width:760px;display:grid;grid-template-columns:1fr 96px;gap:10px;background:#fff;border-radius:16px;padding:8px;box-shadow:0 18px 45px rgba(0,0,0,.22)}
+.search-box input{border:0;outline:0;font-size:16px;padding:14px 16px;color:#0f172a;min-width:0}
+.search-box button{border:0;border-radius:12px;background:#0b63ff;color:white;font-size:15px;font-weight:900}
+.filter-chips{position:relative;z-index:2;display:flex;gap:10px;overflow:auto;padding-top:16px;scrollbar-width:none}.filter-chips::-webkit-scrollbar{display:none}
+.chip{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);color:white;padding:10px 14px;border-radius:999px;white-space:nowrap;font-size:13px;font-weight:900;backdrop-filter:blur(10px)}.chip.active{background:#fff;color:#0b63ff;border-color:#fff}
 
-.search-box{
-  display:flex;
-  gap:10px;
-  margin-top:20px;
-}
+.content{display:block;margin-top:18px}.section-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 14px}.section-head h2{font-size:24px;font-weight:1000;letter-spacing:-.04em}.section-head span{color:#475569;font-size:15px;margin-left:10px;font-weight:700}
+.result-card,.panel-card,.mini-card,.stat-box{background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:20px 22px;margin-bottom:12px;box-shadow:0 14px 42px rgba(15,23,42,.06)}
+.result-meta{color:#0b63ff;font-weight:900;font-size:13px;margin-bottom:8px}.result-card h3{font-size:21px;font-weight:1000;letter-spacing:-.035em;margin-bottom:6px}.result-card p{color:#334155;font-size:15px;white-space:pre-line}
+.tags{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.tag{background:#dbeafe;color:#1d4ed8;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:900}
+.section-block{margin-top:22px}.section-label{display:flex;align-items:center;gap:10px;margin-bottom:12px}.section-icon{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#0b63ff,#1d4ed8);color:#fff;display:grid;place-items:center;font-size:18px;box-shadow:0 8px 18px rgba(37,99,235,.25)}.panel-title{font-size:22px;font-weight:1000;letter-spacing:-.035em;margin:0}
+.form-grid{display:grid;gap:12px}.form-grid input,.form-grid textarea,.form-grid select{width:100%;padding:14px 15px;border-radius:14px;border:1px solid #dbe3ef;background:#fff;color:#0f172a;font-size:15px;outline:none}.form-grid textarea{min-height:120px;resize:vertical}
+.primary-btn,.secondary-btn,.danger-btn{border:0;border-radius:14px;padding:14px 16px;font-size:15px;font-weight:900}.primary-btn{background:#0b63ff;color:#fff}.secondary-btn{background:#eef4fb;color:#0f172a;border:1px solid #dbe3ef}.danger-btn{background:#fee2e2;color:#991b1b}
+.status-line,.notice{color:#64748b;font-size:13px;margin-top:8px}.unanswered-list,.proposal-list,.materials-list{display:grid;gap:12px}.mini-card b{display:block;font-size:16px;margin-bottom:4px}.mini-card small{color:#64748b}.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.ref-link{display:inline-flex;align-items:center;gap:8px;background:#eff6ff;color:#1d4ed8;padding:10px 14px;border-radius:12px;text-decoration:none;font-weight:900;font-size:14px;margin-top:12px}.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat-box small{color:#64748b;font-weight:800}.stat-box b{display:block;font-size:32px;line-height:1.1;margin-top:6px}.review-box{margin-top:12px;padding:14px;border-radius:14px;background:#f8fafc;border:1px solid #dbeafe}.review-label{font-size:12px;font-weight:900;color:#2563eb;margin-bottom:6px}.review-text{font-size:14px;color:#334155;white-space:pre-line;line-height:1.8}
+.material-card{display:block;text-decoration:none;color:#0f172a}.material-card:hover{transform:translateY(-1px)}.material-type{display:inline-block;background:#0b63ff;color:#fff;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:900;margin-bottom:10px}.material-title{font-size:18px;font-weight:1000;margin-bottom:6px}.material-category{font-size:13px;color:#64748b;font-weight:800}
 
-.search-box input{
-  flex:1;
-  padding:16px;
-  border-radius:14px;
-  border:none;
-}
-
-.search-box button{
-  border:none;
-  background:#2563eb;
-  color:white;
-  padding:16px 20px;
-  border-radius:14px;
-  font-weight:700;
-}
-
-.section{
-  margin-top:30px;
-}
-
-.card{
-  background:white;
-  border-radius:18px;
-  padding:18px;
-  margin-top:12px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.05);
-}
-
-.tag{
-  display:inline-block;
-  background:#dbeafe;
-  color:#1d4ed8;
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:12px;
-  margin-top:10px;
-}
-
-input,textarea,select{
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:1px solid #d1d5db;
-  margin-top:10px;
-  box-sizing:border-box;
-}
-
-textarea{
-  min-height:120px;
-}
-
-.btn{
-  width:100%;
-  border:none;
-  background:#2563eb;
-  color:white;
-  padding:16px;
-  border-radius:14px;
-  margin-top:14px;
-  font-weight:700;
-}
-
-.btn-red{
-  background:#dc2626;
-}
-
-.material{
-  text-decoration:none;
-  color:#111827;
-  display:block;
-}
-
-.bottom-nav{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  background:#03122f;
-  display:flex;
-  justify-content:space-around;
-  padding:12px;
-}
-
-.bottom-nav a{
-  color:white;
-  text-decoration:none;
-  font-size:12px;
-}
+@media(max-width:980px){body{background:#f8fafc;padding-bottom:92px}.app{grid-template-columns:1fr;min-height:100dvh}.sidebar{position:fixed;left:0;right:0;bottom:0;top:auto;height:78px;z-index:999;flex-direction:row;align-items:center;justify-content:space-around;padding:10px 10px calc(10px + env(safe-area-inset-bottom));gap:0;border-top:1px solid rgba(255,255,255,.08);background:rgba(3,18,47,.96);backdrop-filter:blur(18px);box-shadow:0 -12px 40px rgba(15,23,42,.22);overflow:hidden}.sidebar > div:first-child,.help-card{display:none}.nav{width:100%;display:grid;grid-template-columns:repeat(6,1fr);gap:4px;align-items:center}.nav-item{flex-direction:column;justify-content:center;align-items:center;gap:4px;padding:8px 2px;border-radius:14px;font-size:10px;font-weight:900;min-height:58px;color:#bfdbfe}.nav-item.active,.nav-item:hover{box-shadow:none;background:rgba(255,255,255,.10)}.nav-icon{font-size:18px;width:auto;line-height:1}.main{padding:0 0 24px}.topbar{display:none}.hero{border-radius:0 0 28px 28px;padding:18px 16px 24px;min-height:auto;border:none;box-shadow:0 12px 40px rgba(15,23,42,.14)}.hero::before{width:100%;opacity:.4}.hero::after{right:-60px;width:240px;height:180px}.hero-brand{gap:10px;margin-bottom:8px;align-items:center}.hero-logo{width:62px;height:54px}.hero-logo::before{width:38px;height:38px;border-width:7px}.hero-logo::after{font-size:30px;left:13px;top:23px}.hero-title{font-size:24px;line-height:.95;letter-spacing:-.05em}.hero-sub{font-size:13px;line-height:1.6;margin:10px 0 16px;color:#dbeafe}.search-box{grid-template-columns:1fr 74px;gap:8px;border-radius:18px;padding:7px;box-shadow:0 14px 34px rgba(0,0,0,.18)}.search-box input{padding:15px 14px;font-size:16px}.search-box button{border-radius:14px;font-size:14px;padding:0}.filter-chips{padding-top:12px}.chip{padding:9px 13px;font-size:12px}.content{padding:14px 14px 0;margin-top:0}.section-head{margin:10px 0 12px}.section-head h2{font-size:18px}.result-card,.panel-card,.mini-card,.stat-box{border-radius:18px;padding:16px;box-shadow:0 8px 24px rgba(15,23,42,.05)}.result-card h3{font-size:18px;line-height:1.35}.result-card p{font-size:14px;line-height:1.8}.section-block{margin-top:24px}.section-icon{width:34px;height:34px;border-radius:12px}.panel-title{font-size:22px}.form-grid input,.form-grid textarea,.form-grid select{padding:15px 14px;font-size:16px;border-radius:14px}.primary-btn,.secondary-btn,.danger-btn{padding:15px 16px;border-radius:14px;font-size:15px}.stats-grid{grid-template-columns:1fr 1fr}.stat-box b{font-size:26px}}
 </style>
 </head>
 
 <body>
+<div class="app">
+  <aside class="sidebar">
+    <div><div class="brand-mark"></div><div class="brand-name">CGC<br>FIELD<br>ANSWER</div></div>
+    <nav class="nav">
+      <a class="nav-item active" href="#search"><span class="nav-icon">⌕</span>検索</a>
+      <a class="nav-item" href="#proposal"><span class="nav-icon">＋</span>投稿</a>
+      <a class="nav-item" href="#materials"><span class="nav-icon">▶</span>教材</a>
+      <a class="nav-item" href="#admin"><span class="nav-icon">⚙</span>管理</a>
+      <a class="nav-item" href="#unanswered"><span class="nav-icon">✉</span>未回答</a>
+      <a class="nav-item" href="#status"><span class="nav-icon">◷</span>状況</a>
+    </nav>
+    <div class="help-card"><b>FIELD ANSWER</b><p>現場の質問を、チームの資産へ。</p></div>
+  </aside>
 
-<header>
-  <h1>CGC FIELD ANSWER</h1>
-  <div class="hero" id="heroQuote"></div>
+  <main class="main">
+    <div class="topbar"><div class="top-icon">DB</div><div class="top-icon">案<span class="badge" id="proposalBadge">0</span></div></div>
+    <section class="hero" id="search">
+      <div class="hero-brand"><div class="hero-logo"></div><div class="hero-title"><span>CGC</span> FIELD ANSWER</div></div>
+      <div class="hero-sub" id="heroQuote">即答できる営業は、信頼される。 — 孫正義（実業家）</div>
+      <div class="search-box"><input id="searchInput" placeholder="例：紙の請求書 / 解約金 / WS" onkeydown="if(event.key==='Enter') searchKnowledge()"><button onclick="searchKnowledge()">検索</button></div>
+      <div class="filter-chips"><button class="chip active" onclick="filterCategory('all', this)">すべて</button><button class="chip" onclick="filterCategory('新電力', this)">新電力</button><button class="chip" onclick="filterCategory('WS', this)">WS</button><button class="chip" onclick="filterCategory('VOD', this)">VOD</button><button class="chip" onclick="filterCategory('営業', this)">営業</button></div>
+    </section>
 
-  <div class="search-box">
-    <input
-      id="searchInput"
-      placeholder="検索..."
-      onkeydown="if(event.key==='Enter')searchKnowledge()"
-    >
+    <section class="content">
+      <div id="results"><div class="section-head"><h2>検索結果 <span>0件</span></h2></div><div class="result-card"><div class="result-meta">検索してください</div><h3>キーワードを入力すると、登録済みナレッジを検索できます。</h3><p>例：他社電力の明細 / 解約金 / WS / VOD / 新電力</p></div></div>
 
-    <button onclick="searchKnowledge()">
-      検索
-    </button>
-  </div>
-</header>
-
-<div class="container">
-
-  <div class="section">
-    <h2>検索結果</h2>
-    <div id="results"></div>
-  </div>
-
-  <div class="section">
-    <h2>回答案投稿</h2>
-
-    <div class="card">
-
-      <input id="proposalQuestion" placeholder="質問">
-
-      <select id="proposalCategory">
-        <option>新電力</option>
-        <option>WS</option>
-        <option>VOD</option>
-        <option>営業</option>
-      </select>
-
-      <textarea
-        id="proposalAnswer"
-        placeholder="回答案"
-      ></textarea>
-
-      <input
-        id="proposalUrl"
-        placeholder="参考URL（任意）"
-      >
-
-      <button
-        class="btn"
-        onclick="submitProposal()"
-      >
-        投稿する
-      </button>
-
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>教材ライブラリ</h2>
-
-    <div id="materialsList"></div>
-  </div>
-
-  <div class="section">
-    <h2>管理</h2>
-
-    <div id="adminArea"></div>
-  </div>
-
-  <div class="section">
-    <h2>未回答</h2>
-
-    <div id="requestList"></div>
-  </div>
-
-</div>
-
-<div class="bottom-nav">
-  <a href="#">検索</a>
-  <a href="#materialsList">教材</a>
-  <a href="#adminArea">管理</a>
+      <div class="section-block" id="proposal"><div class="section-label"><div class="section-icon">＋</div><h2 class="panel-title">回答案を投稿</h2></div><div id="proposalForm"></div></div>
+      <div class="section-block" id="materials"><div class="section-label"><div class="section-icon">▶</div><h2 class="panel-title">教材ライブラリ</h2></div><div class="filter-chips" style="margin-bottom:12px;padding-top:0"><button class="chip active" onclick="filterMaterialCategory('all', this)">すべて</button><button class="chip" onclick="filterMaterialCategory('新電力', this)">新電力</button><button class="chip" onclick="filterMaterialCategory('WS', this)">WS</button><button class="chip" onclick="filterMaterialCategory('VOD', this)">VOD</button><button class="chip" onclick="filterMaterialCategory('営業', this)">営業</button><button class="chip" onclick="filterMaterialCategory('後確認', this)">後確認</button></div><div id="materialsList" class="materials-list"></div></div>
+      <div class="section-block" id="admin"><div class="section-label"><div class="section-icon">⚙</div><h2 class="panel-title">管理</h2></div><div id="adminArea"></div></div>
+      <div class="section-block" id="unanswered"><div class="section-label"><div class="section-icon">✉</div><h2 class="panel-title">未回答</h2></div><div id="requestList" class="unanswered-list"></div></div>
+      <div class="section-block" id="status"><div class="section-label"><div class="section-icon">◷</div><h2 class="panel-title">状況</h2></div><div class="stats-grid"><div class="stat-box"><small>登録ナレッジ</small><b id="knowledgeCount">0</b></div><div class="stat-box"><small>未回答質問</small><b id="requestCount">0</b></div><div class="stat-box"><small>審査中の回答案</small><b id="proposalCount">0</b></div></div></div>
+    </section>
+  </main>
 </div>
 
 <script>
-
-let knowledge = []
-let requests = []
-let proposals = []
-let materials = []
-
-const quotes = [
-  "即答できる営業は強い",
-  "知識は武器になる",
-  "営業は反応速度",
-  "現場を止めない",
-  "検索一発で即回答",
-  "迷わない営業へ",
-  "知識共有が組織を強くする"
-]
+let knowledge = [];
+let requests = [];
+let proposals = [];
+let materials = [];
+let currentCategory = 'all';
+let currentMaterialCategory = 'all';
 
 const synonymGroups = [
-  ["明細","請求","請求書","検針票"],
-  ["解約","違約金","解約金","キャンセル"],
-  ["ws","ウォーターサーバー","水"],
-  ["vod","動画","映画","配信"],
-  ["後確認","後確","確認電話"]
-]
+  ["明細","請求","請求書","検針票","web明細","ウェブ明細","紙明細","利用明細","料金明細","電気明細","請求の紙","紙の請求書","請求データ"],
+  ["電気代","料金","電気料金","単価","基本料金","従量料金","料金表","月額","費用","金額","請求額"],
+  ["燃調","燃料調整費","燃料費調整額","燃料費","調整費","燃料費調整"],
+  ["再エネ","再エネ賦課金","再生可能エネルギー発電促進賦課金","賦課金"],
+  ["供給地点","供給地点番号","供給地点特定番号","地点番号","22桁番号","地点特定番号","電気の番号"],
+  ["契約容量","容量","アンペア","a","kva","kw","契約電力","ブレーカー"],
+  ["切替","切り替え","スイッチング","乗り換え","変更","電力会社変更","新電力変更"],
+  ["開始日","供給開始","通電","利用開始","契約開始","開始予定日"],
+  ["解約","解約金","違約金","キャンセル","解除","停止","やめる","退会","中止","解約料","キャンセル料"],
+  ["支払い","決済","口座","口座振替","クレカ","クレジットカード","振込","コンビニ","払込票","支払方法"],
+  ["水","ウォーターサーバー","ws","サーバー","天然水","ro水","ボトル","水ボトル"],
+  ["配送","追加配送","配達","水の配送","ボトル配送","スキップ","休止","配送停止"],
+  ["vod","動画","映画","アニメ","見放題","配信","動画配信","サブスク","オンデマンド"],
+  ["後確認","後確","確認電話","内容確認","契約確認"],
+  ["獲得","成約","受注","契約","申込","申し込み","契確"],
+  ["不備","差し戻し","ミス","不足","確認漏れ","入力不備"],
+  ["架電","着電","電話","発信","受電","コール"],
+  ["折り返し","折返し","コールバック","再連絡","後で電話"]
+];
 
-function normalize(text){
-  return String(text || '')
-    .toLowerCase()
-    .replace(/ /g,'')
-}
+const quotes = [
+"即答できる営業は、信頼される。 — 孫正義（実業家）",
+"スピードは最大の武器だ。 — 堀江貴文（実業家）",
+"まず踏み込め。迷った方が負ける。 — 前澤友作（実業家）",
+"知識は、行動して初めて価値になる。 — イーロン・マスク（起業家）",
+"現場を知らない戦略は弱い。 — 稲盛和夫（京セラ創業者）",
+"小さな差が、大きな信頼になる。 — 松下幸之助（Panasonic創業者）",
+"ハングリーであれ。愚か者であれ。 — スティーブ・ジョブズ（Apple創業者）",
+"完璧を待つより、まず終わらせろ。 — マーク・ザッカーバーグ（Meta創業者）",
+"未来を予測する最良の方法は、自ら創ることだ。 — ピーター・ドラッカー（経営学者）",
+"知識への投資は、最高の利益を生む。 — ベンジャミン・フランクリン（政治家・発明家）",
+"話すのをやめて、始めることだ。 — ウォルト・ディズニー（Disney創業者）",
+"成功するまでやり続ければ、失敗ではない。 — 稲盛和夫（京セラ創業者）",
+"変化を恐れるな。 — ジャック・マー（Alibaba創業者）",
+"行動しながら学べ。 — リード・ホフマン（LinkedIn創業者）",
+"人は、動きながら強くなる。 — 本田宗一郎（Honda創業者）",
+"挑戦の数だけ、成長できる。 — 本田宗一郎（Honda創業者）",
+"成功とは、情熱を失わずに失敗を重ねること。 — ウィンストン・チャーチル（元イギリス首相）",
+"リスクを取らないことが、最大のリスク。 — マーク・ザッカーバーグ（Meta創業者）",
+"現状維持は、後退である。 — 松下幸之助（Panasonic創業者）",
+"情報を持つ者が、主導権を握る。 — 孫正義（SoftBank創業者）",
+"答えを持つ営業は強い。 — 柳井正（ユニクロ創業者）",
+"確認速度が営業速度。 — 三木谷浩史（楽天創業者）",
+"最速で動く者が、最も多く学ぶ。 — エリック・リース（起業家・著者）",
+"今やれ。 — ジョージ・パットン（米軍将軍）",
+"知識は力だ。 — フランシス・ベーコン（哲学者）",
+"現場に答えがある。 — 松下幸之助（Panasonic創業者）",
+"勝者は、諦めなかった人だ。 — ナポレオン・ヒル（成功哲学作家）",
+"知っているだけでは足りない。行動せよ。 — ゲーテ（詩人・作家）",
+"決断に迷う時間を減らせ。 — ジェフ・ベゾス（Amazon創業者）",
+"最短距離は、まず始めること。 — セス・ゴーディン（マーケター・著者）",
+];
 
-function expandTerms(word){
+function normalizeText(text){let value=String(text||'').toLowerCase();value=value.replace(/[Ａ-Ｚａ-ｚ０-９]/g,s=>String.fromCharCode(s.charCodeAt(0)-0xFEE0));const removeChars=[' ','　','・','／','/','-','ー','＿','_','（','）','(',')','「','」','『','』','【','】','[',']','、','。',',','.'];removeChars.forEach(char=>value=value.split(char).join(''));return value;}
+function expandSearchTerms(input){const base=normalizeText(input);const terms=new Set([base]);synonymGroups.forEach(group=>{const normalizedGroup=group.map(normalizeText);const hit=normalizedGroup.some(word=>base.includes(word)||word.includes(base));if(hit)normalizedGroup.forEach(word=>terms.add(word));});return Array.from(terms).filter(Boolean);}
+function safeText(text){return String(text||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function safeArg(text){return String(text||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,' ');}
+function setHeroQuote(){document.getElementById('heroQuote').textContent=quotes[Math.floor(Math.random()*quotes.length)];}
+function isAdmin(){return localStorage.getItem('adminUnlocked')==='true';}
+function getQuestion(item){return item['質問']||'';} function getAnswer(item){return item['答え']||'';} function getCategory(item){return item['カテゴリ']||'未分類';} function getReferenceUrl(item){return item['参考URL']||'';} function getStatus(item){return item['状態']||'未対応';} function getDate(item){return item.created_at?new Date(item.created_at).toLocaleString('ja-JP'):'';}
 
-  const result = new Set([normalize(word)])
-
-  synonymGroups.forEach(group=>{
-
-    const hit = group.some(
-      x=>normalize(word).includes(normalize(x))
-    )
-
-    if(hit){
-      group.forEach(
-        x=>result.add(normalize(x))
-      )
-    }
-  })
-
-  return [...result]
-}
-
-function setHero(){
-
-  document.getElementById('heroQuote')
-    .innerText =
-      quotes[
-        Math.floor(Math.random()*quotes.length)
-      ]
-}
-
-async function loadData(){
-
-  const answers =
-    await supabaseClient
-      .from('回答')
-      .select('*')
-
-  const unanswered =
-    await supabaseClient
-      .from('未回答')
-      .select('*')
-
-  const proposalData =
-    await supabaseClient
-      .from('回答案')
-      .select('*')
-
-  const materialData =
-    await supabaseClient
-      .from('教材')
-      .select('*')
-
-  knowledge = answers.data || []
-  requests = unanswered.data || []
-  proposals = proposalData.data || []
-  materials = materialData.data || []
-
-  renderRequests()
-  renderAdmin()
-  renderMaterials()
-}
-
-function searchKnowledge(){
-
-  const word =
-    document.getElementById('searchInput').value
-
-  const terms = expandTerms(word)
-
-  const filtered =
-    knowledge.filter(item=>{
-
-      const text =
-        normalize(
-          item['質問'] +
-          item['答え']
-        )
-
-      return terms.some(
-        term=>text.includes(term)
-      )
-    })
-
-  const results =
-    document.getElementById('results')
-
-  if(filtered.length === 0){
-
-    results.innerHTML = `
-      <div class="card">
-        回答なし
-
-        <button
-          class="btn"
-          onclick="submitRequest('${word}')"
-        >
-          未回答として送信
-        </button>
-      </div>
-    `
-
-    return
-  }
-
-  results.innerHTML =
-    filtered.map(item=>`
-
-      <div class="card">
-
-        <h3>${item['質問']}</h3>
-
-        <p>${item['答え']}</p>
-
-        <div class="tag">
-          ${item['カテゴリ']}
-        </div>
-
-        ${
-          item['参考URL']
-          ? `
-            <a
-              href="${item['参考URL']}"
-              target="_blank"
-            >
-              参考URL
-            </a>
-          `
-          : ''
-        }
-
-      </div>
-
-    `).join('')
-}
-
-async function submitRequest(word){
-
-  await supabaseClient
-    .from('未回答')
-    .insert([{
-      '質問':word
-    }])
-
-  alert('送信しました')
-
-  await loadData()
-}
-
-async function submitProposal(){
-
-  const question =
-    document.getElementById('proposalQuestion').value
-
-  const category =
-    document.getElementById('proposalCategory').value
-
-  const answer =
-    document.getElementById('proposalAnswer').value
-
-  const url =
-    document.getElementById('proposalUrl').value
-
-  await supabaseClient
-    .from('回答案')
-    .insert([{
-      '質問':question,
-      'カテゴリ':category,
-      '答え':answer,
-      '参考URL':url,
-      '状態':'審査中'
-    }])
-
-  alert('投稿完了')
-
-  await loadData()
+function renderProposalForm(){
+  document.getElementById('proposalForm').innerHTML = `<div class="panel-card"><div class="form-grid"><input id="proposalQuestion" placeholder="質問・キーワード"><select id="proposalCategory"><option>新電力</option><option>WS</option><option>VOD</option><option>営業</option><option>その他</option></select><textarea id="proposalAnswer" placeholder="回答案"></textarea><input id="proposalUrl" placeholder="参考URL（任意）"><button class="primary-btn" onclick="submitProposal()">回答案を投稿する</button><div class="status-line">投稿後すぐには公開されません。管理者確認後に公開されます。</div></div></div>`;
 }
 
 function renderAdmin(){
-
-  const admin =
-    document.getElementById('adminArea')
-
-  admin.innerHTML = `
-
-    <div class="card">
-
-      <input
-        type="password"
-        id="adminPassword"
-        placeholder="管理パスワード"
-      >
-
-      <button
-        class="btn"
-        onclick="unlockAdmin()"
-      >
-        管理画面を開く
-      </button>
-
-    </div>
-  `
-}
-
-function unlockAdmin(){
-
-  const pass =
-    document.getElementById('adminPassword').value
-
-  if(pass !== ADMIN_PASSWORD){
-
-    alert('パスワード違います')
-    return
+  const adminArea=document.getElementById('adminArea');
+  if(!isAdmin()){
+    adminArea.innerHTML=`<div class="panel-card"><div style="font-weight:900;font-size:18px;margin-bottom:14px">管理ログイン</div><div class="form-grid"><input id="adminPassword" type="password" placeholder="管理パスコード"><button class="primary-btn" onclick="unlockAdmin()">管理画面を開く</button><div class="status-line">回答案の公開・却下には管理パスコードが必要です。</div></div></div>`;
+    return;
   }
-
-  const pending =
-    proposals.filter(
-      x=>x['状態']==='審査中'
-    )
-
-  document.getElementById('adminArea')
-    .innerHTML =
-      pending.map(item=>`
-
-        <div class="card">
-
-          <input
-            id="q_${item.id}"
-            value="${item['質問']}"
-          >
-
-          <textarea
-            id="a_${item.id}"
-          >${item['答え']}</textarea>
-
-          <input
-            id="u_${item.id}"
-            value="${item['参考URL'] || ''}"
-          >
-
-          <button
-            class="btn"
-            onclick="publish('${item.id}')"
-          >
-            編集して公開
-          </button>
-
-          <button
-            class="btn btn-red"
-            onclick="reject('${item.id}')"
-          >
-            却下
-          </button>
-
-        </div>
-
-      `).join('')
+  const pending = proposals.filter(item => getStatus(item) === '審査中');
+  adminArea.innerHTML = `
+    <div class="panel-card">
+      <div style="font-weight:900;font-size:18px;margin-bottom:14px">管理メニュー</div>
+      <div class="btn-row"><button class="secondary-btn" onclick="lockAdmin()">管理画面を閉じる</button></div>
+    </div>
+    <div class="panel-card">
+      <div style="font-weight:900;font-size:18px;margin-bottom:14px">審査中の回答案</div>
+      ${pending.length===0?`<div class="notice">審査中の回答案はありません。</div>`:pending.map(item=>`
+        <div class="review-box">
+          <div class="review-label">質問</div>
+          <input id="reviewQuestion_${item.id}" value="${safeText(getQuestion(item))}">
+          <div class="review-label" style="margin-top:10px">カテゴリ</div>
+          <select id="reviewCategory_${item.id}"><option ${getCategory(item)==='新電力'?'selected':''}>新電力</option><option ${getCategory(item)==='WS'?'selected':''}>WS</option><option ${getCategory(item)==='VOD'?'selected':''}>VOD</option><option ${getCategory(item)==='営業'?'selected':''}>営業</option><option ${getCategory(item)==='その他'?'selected':''}>その他</option></select>
+          <div class="review-label" style="margin-top:10px">回答案</div>
+          <textarea id="reviewAnswer_${item.id}">${safeText(getAnswer(item))}</textarea>
+          <div class="review-label" style="margin-top:10px">参考URL 任意</div>
+          <input id="reviewUrl_${item.id}" value="${safeText(getReferenceUrl(item))}">
+          <small>${safeText(getDate(item))}</small>
+          <div class="btn-row"><button class="primary-btn" onclick="publishProposal('${item.id}')">公開</button><button class="danger-btn" onclick="rejectProposal('${item.id}')">却下</button></div>
+        </div>`).join('')}
+    </div>
+    <div class="panel-card">
+      <div style="font-weight:900;font-size:18px;margin-bottom:14px">直接ナレッジ追加</div>
+      <div class="form-grid">
+        <input id="newKeyword" placeholder="質問・キーワード">
+        <select id="newCategory"><option>新電力</option><option>WS</option><option>VOD</option><option>営業</option><option>その他</option></select>
+        <textarea id="newAnswer" placeholder="回答内容"></textarea>
+        <input id="newReferenceUrl" placeholder="参考URL（任意）">
+        <button class="primary-btn" onclick="addKnowledge()">直接追加する</button>
+      </div>
+    </div>
+    <div class="panel-card">
+      <div style="font-weight:900;font-size:18px;margin-bottom:14px">教材追加</div>
+      <div class="form-grid">
+        <input id="newMaterialTitle" placeholder="教材タイトル">
+        <input id="newMaterialUrl" placeholder="YouTube / PDF / 資料URL">
+        <select id="newMaterialType"><option>動画</option><option>PDF</option><option>資料</option></select>
+        <select id="newMaterialCategory"><option>新電力</option><option>WS</option><option>VOD</option><option>営業</option><option>後確認</option><option>その他</option></select>
+        <button class="primary-btn" onclick="addMaterial()">教材を追加する</button>
+      </div>
+    </div>
+  `;
 }
+function unlockAdmin(){const pass=document.getElementById('adminPassword').value.trim();if(pass!==ADMIN_PASSWORD){alert('パスコードが違います');return;}localStorage.setItem('adminUnlocked','true');renderAdmin();}
+function lockAdmin(){localStorage.removeItem('adminUnlocked');renderAdmin();}
 
-async function publish(id){
-
-  const question =
-    document.getElementById(`q_${id}`).value
-
-  const answer =
-    document.getElementById(`a_${id}`).value
-
-  const url =
-    document.getElementById(`u_${id}`).value
-
-  const target =
-    proposals.find(x=>x.id == id)
-
-  await supabaseClient
-    .from('回答')
-    .insert([{
-      '質問':question,
-      '答え':answer,
-      'カテゴリ':target['カテゴリ'],
-      '参考URL':url
-    }])
-
-  await supabaseClient
-    .from('回答案')
-    .update({
-      '状態':'公開済み'
-    })
-    .eq('id',id)
-
-  alert('公開しました')
-
-  await loadData()
+async function loadData(){
+  const answersResult=await supabaseClient.from('回答').select('*').order('created_at',{ascending:false});
+  const unansweredResult=await supabaseClient.from('未回答').select('*').order('created_at',{ascending:false});
+  const proposalsResult=await supabaseClient.from('回答案').select('*').order('created_at',{ascending:false});
+  const materialsResult=await supabaseClient.from('教材').select('*').order('created_at',{ascending:false});
+  if(answersResult.error){console.error(answersResult.error);alert('回答データの読み込みに失敗しました。');return;}
+  if(unansweredResult.error){console.error(unansweredResult.error);alert('未回答データの読み込みに失敗しました。');return;}
+  if(proposalsResult.error){console.error(proposalsResult.error);alert('回答案データの読み込みに失敗しました。');return;}
+  if(materialsResult.error){console.error(materialsResult.error);alert('教材データの読み込みに失敗しました。');return;}
+  knowledge=answersResult.data||[];requests=unansweredResult.data||[];proposals=proposalsResult.data||[];materials=materialsResult.data||[];
+  updateStats();renderRequests();renderProposalForm();renderAdmin();renderMaterials();searchKnowledge(false);
 }
+function updateStats(){const pending=proposals.filter(item=>getStatus(item)==='審査中').length;document.getElementById('knowledgeCount').innerText=knowledge.length;document.getElementById('requestCount').innerText=requests.length;document.getElementById('proposalCount').innerText=pending;document.getElementById('proposalBadge').innerText=pending;}
+function filterCategory(category,element){currentCategory=category;document.querySelectorAll('#search .chip').forEach(chip=>chip.classList.remove('active'));if(element)element.classList.add('active');searchKnowledge(false);}
+function filterMaterialCategory(category,element){currentMaterialCategory=category;document.querySelectorAll('#materials .chip').forEach(chip=>chip.classList.remove('active'));if(element)element.classList.add('active');renderMaterials();}
 
-async function reject(id){
-
-  await supabaseClient
-    .from('回答案')
-    .update({
-      '状態':'却下'
-    })
-    .eq('id',id)
-
-  alert('却下しました')
-
-  await loadData()
+function searchKnowledge(scrollToResults=true){
+  const rawInput=document.getElementById('searchInput').value.trim();const input=normalizeText(rawInput);const searchTerms=expandSearchTerms(rawInput);const results=document.getElementById('results');
+  if(!input){results.innerHTML=`<div class="section-head"><h2>検索結果 <span>0件</span></h2></div><div class="result-card"><div class="result-meta">検索してください</div><h3>キーワードを入力すると、登録済みナレッジを検索できます。</h3><p>例：他社電力の明細 / 解約金 / WS / VOD / 新電力</p></div>`;return;}
+  const filtered=knowledge.filter(item=>{const question=normalizeText(getQuestion(item));const answer=normalizeText(getAnswer(item));const category=normalizeText(getCategory(item));const searchableText=question+answer+category;const keywordMatch=searchTerms.some(term=>searchableText.includes(term));const categoryMatch=currentCategory==='all'?true:category.includes(normalizeText(currentCategory));return keywordMatch&&categoryMatch;});
+  if(filtered.length===0){results.innerHTML=`<div class="section-head"><h2>検索結果 <span>0件</span></h2></div><div class="result-card"><div class="result-meta">該当なし</div><h3>この質問はまだ登録されていません。</h3><p>必要であれば、未回答として送信してください。</p><div class="btn-row"><button class="primary-btn" onclick="submitRequest('${safeArg(rawInput)}')">この質問を送信</button></div></div>`;if(scrollToResults)document.getElementById('results').scrollIntoView({behavior:'smooth'});return;}
+  results.innerHTML=`<div class="section-head"><h2>検索結果 <span>${filtered.length}件</span></h2></div>`+filtered.map(item=>`<article class="result-card"><div class="result-meta">${safeText(getCategory(item))}</div><h3>${safeText(getQuestion(item))}</h3><p>${safeText(getAnswer(item))}</p>${getReferenceUrl(item)?`<a class="ref-link" href="${safeText(getReferenceUrl(item))}" target="_blank">↗ 参考URLを開く</a>`:''}<div class="tags"><span class="tag">${safeText(getCategory(item))}</span></div></article>`).join('');
+  if(scrollToResults)document.getElementById('results').scrollIntoView({behavior:'smooth'});
 }
-
-function renderRequests(){
-
-  document.getElementById('requestList')
-    .innerHTML =
-      requests.map(item=>`
-
-        <div class="card">
-          ${item['質問']}
-        </div>
-
-      `).join('')
+async function submitRequest(text){if(!text){alert('検索欄に質問を入力してください');return;}const {error}=await supabaseClient.from('未回答').insert([{ '質問':text,'状態':'未対応'}]);if(error){console.error(error);alert('未回答の保存に失敗しました。');return;}alert('未回答として保存しました');await loadData();}
+function renderRequests(){const requestList=document.getElementById('requestList');if(requests.length===0){requestList.innerHTML=`<div class="mini-card"><b>未回答質問はありません</b><small>該当なしの質問が送信されるとここに表示されます。</small></div>`;return;}requestList.innerHTML=requests.map(item=>`<div class="mini-card"><b>${safeText(getQuestion(item))}</b><small>${safeText(getStatus(item))} / ${safeText(getDate(item))}</small></div>`).join('');}
+async function submitProposal(){
+  const question=document.getElementById('proposalQuestion').value.trim();const category=document.getElementById('proposalCategory').value;const answer=document.getElementById('proposalAnswer').value.trim();const url=document.getElementById('proposalUrl').value.trim();
+  if(!question||!answer||!category){alert('質問・回答案・カテゴリを入力してください');return;}
+  const {error}=await supabaseClient.from('回答案').insert([{ '質問':question,'答え':answer,'カテゴリ':category,'参考URL':url,'状態':'審査中'}]);
+  if(error){console.error(error);alert('回答案の投稿に失敗しました');return;}
+  alert('回答案を投稿しました。管理者確認後に公開されます。');
+  document.getElementById('proposalQuestion').value='';document.getElementById('proposalAnswer').value='';document.getElementById('proposalUrl').value='';
+  await loadData();
 }
-
+async function publishProposal(id){
+  if(!isAdmin()){alert('管理ログインしてください');return;}
+  const question=document.getElementById(`reviewQuestion_${id}`).value.trim();const category=document.getElementById(`reviewCategory_${id}`).value;const answer=document.getElementById(`reviewAnswer_${id}`).value.trim();const url=document.getElementById(`reviewUrl_${id}`).value.trim();
+  if(!question||!answer||!category){alert('質問・回答・カテゴリは必須です');return;}
+  const {error:insertError}=await supabaseClient.from('回答').insert([{ '質問':question,'答え':answer,'カテゴリ':category,'参考URL':url }]);
+  if(insertError){console.error(insertError);alert('公開に失敗しました');return;}
+  const {error:updateError}=await supabaseClient.from('回答案').update({ '質問':question,'答え':answer,'カテゴリ':category,'参考URL':url,'状態':'公開済み'}).eq('id',id);
+  if(updateError){console.error(updateError);alert('公開済み更新に失敗しました');return;}
+  alert('公開しました');await loadData();
+}
+async function rejectProposal(id){
+  if(!isAdmin()){alert('管理ログインしてください');return;}
+  if(!confirm('この回答案を却下しますか？'))return;
+  const {error}=await supabaseClient.from('回答案').update({ '状態':'却下'}).eq('id',id);
+  if(error){console.error(error);alert('却下に失敗しました');return;}
+  alert('却下しました');await loadData();
+}
+async function addKnowledge(){
+  if(!isAdmin()){alert('管理ログインしてください');return;}
+  const question=document.getElementById('newKeyword').value.trim();const category=document.getElementById('newCategory').value;const answer=document.getElementById('newAnswer').value.trim();const url=document.getElementById('newReferenceUrl').value.trim();
+  if(!question||!answer||!category){alert('質問・回答・カテゴリを入力してください');return;}
+  const {error}=await supabaseClient.from('回答').insert([{ '質問':question,'答え':answer,'カテゴリ':category,'参考URL':url }]);
+  if(error){console.error(error);alert('追加に失敗しました');return;}
+  alert('ナレッジを追加しました');await loadData();
+}
+async function addMaterial(){
+  if(!isAdmin()){alert('管理ログインしてください');return;}
+  const title=document.getElementById('newMaterialTitle').value.trim();const url=document.getElementById('newMaterialUrl').value.trim();const type=document.getElementById('newMaterialType').value;const category=document.getElementById('newMaterialCategory').value;
+  if(!title||!url||!type||!category){alert('教材タイトル・URL・種別・カテゴリを入力してください');return;}
+  const {error}=await supabaseClient.from('教材').insert([{ 'タイトル':title,'URL':url,'種別':type,'カテゴリ':category,'状態':'公開'}]);
+  if(error){console.error(error);alert('教材追加に失敗しました');return;}
+  alert('教材を追加しました');await loadData();
+}
 function renderMaterials(){
-
-  document.getElementById('materialsList')
-    .innerHTML =
-      materials.map(item=>`
-
-        <a
-          class="card material"
-          href="${item['URL']}"
-          target="_blank"
-        >
-
-          <div class="tag">
-            ${item['種別']}
-          </div>
-
-          <h3>${item['タイトル']}</h3>
-
-          <p>${item['カテゴリ']}</p>
-
-        </a>
-
-      `).join('')
+  const list=document.getElementById('materialsList');
+  const visible=materials.filter(item=>getStatus(item)==='公開').filter(item=>currentMaterialCategory==='all'?true:normalizeText(getCategory(item)).includes(normalizeText(currentMaterialCategory)));
+  if(visible.length===0){list.innerHTML=`<div class="mini-card"><b>教材はまだありません</b><small>管理画面からYouTubeやPDFのURLを追加できます。</small></div>`;return;}
+  list.innerHTML=visible.map(item=>`<a class="mini-card material-card" href="${safeText(item['URL']||'')}" target="_blank"><div class="material-type">${safeText(item['種別']||'教材')}</div><div class="material-title">${safeText(item['タイトル']||'無題')}</div><div class="material-category">${safeText(getCategory(item))}</div></a>`).join('');
 }
-
-window.onload = async ()=>{
-
-  setHero()
-
-  await loadData()
-}
+window.addEventListener('DOMContentLoaded',async()=>{setHeroQuote();renderProposalForm();renderAdmin();await loadData();});
 </script>
-
 </body>
 </html>
-

@@ -36,6 +36,8 @@ body{
   min-height:100vh;
   line-height:1.6;
   padding-bottom:92px;
+
+  overflow-x:hidden;
 }
 button,input,textarea,select{font-family:inherit}
 button{cursor:pointer}
@@ -61,7 +63,28 @@ button{cursor:pointer}
 .top-icon{width:38px;height:38px;border-radius:50%;border:1px solid #dbe3ef;display:grid;place-items:center;background:#fff;color:#0f172a;font-weight:900;position:relative}
 .badge{position:absolute;top:-5px;right:-5px;background:#ef4444;color:white;font-size:11px;min-width:20px;height:20px;border-radius:50%;display:grid;place-items:center;padding:0 5px}
 
-.hero{position:relative;overflow:hidden;border-radius:24px;min-height:300px;background:linear-gradient(90deg,#03122f 0%,#07245b 44%,rgba(7,36,91,.78) 64%,rgba(255,255,255,.05) 100%),radial-gradient(circle at 62% 62%,rgba(59,130,246,.55),transparent 28%);padding:44px 44px 28px;color:white;box-shadow:0 26px 70px rgba(15,23,42,.18);border:1px solid rgba(37,99,235,.18)}
+.hero{
+position:relative;
+overflow:hidden;
+border-radius:24px;
+min-height:300px;
+background:
+linear-gradient(
+90deg,
+#03122f 0%,
+#07245b 55%,
+#0b2d6f 100%
+),
+radial-gradient(
+circle at 62% 62%,
+rgba(59,130,246,.35),
+transparent 28%
+);
+padding:44px 44px 28px;
+color:white;
+box-shadow:0 26px 70px rgba(15,23,42,.18);
+border:1px solid rgba(37,99,235,.18)
+}
 .hero::before{content:"";position:absolute;right:0;top:0;width:44%;height:100%;background:linear-gradient(90deg,rgba(3,18,47,.45),transparent 30%),radial-gradient(circle at 55% 35%,rgba(255,255,255,.28),transparent 18%);opacity:.9}
 .hero::after{content:"";position:absolute;right:38%;bottom:-18px;width:360px;height:210px;background:radial-gradient(circle,#1d4ed8 0,transparent 68%);filter:blur(34px);opacity:.75}
 .hero-brand{position:relative;z-index:2;display:flex;align-items:center;gap:22px;margin-bottom:10px}
@@ -359,37 +382,164 @@ html{
 <div class="app">
   <aside class="sidebar">
     <div><div class="brand-mark"></div><div class="brand-name">CGC<br>FIELD<br>ANSWER</div></div>
-    <nav class="nav">
-      <a class="nav-item active" href="#search"><span class="nav-icon">⌕</span>検索</a>
-      <a class="nav-item" href="#proposal"><span class="nav-icon">＋</span>投稿</a>
-      <a class="nav-item" href="#materials"><span class="nav-icon">▶</span>教材</a>
-      <a class="nav-item" href="#admin"><span class="nav-icon">⚙</span>管理</a>
-      <a class="nav-item" href="#unanswered"><span class="nav-icon">✉</span>未回答</a>
-      <a class="nav-item" href="#status"><span class="nav-icon">◷</span>状況</a>
-    </nav>
+   <a class="nav-item" onclick="showPage('materials',this)">
+    <span class="nav-icon">▶</span>
+    教材
+  </a>
+
+  <a class="nav-item" onclick="showPage('admin',this)">
+    <span class="nav-icon">⚙</span>
+    管理
+  </a>
+
+  <a class="nav-item" onclick="showPage('unanswered',this)">
+    <span class="nav-icon">✉</span>
+    未回答
+  </a>
+
+  <a class="nav-item" onclick="showPage('status',this)">
+    <span class="nav-icon">◷</span>
+    状況
+  </a>
+
+</nav>
     <div class="help-card"><b>FIELD ANSWER</b><p>現場の質問を、チームの資産へ。</p></div>
   </aside>
 
   <main class="main">
     <div class="topbar"><div class="top-icon">DB</div><div class="top-icon">案<span class="badge" id="proposalBadge">0</span></div></div>
-    <section class="hero" id="search">
-      <div class="hero-brand"><div class="hero-logo"></div><div class="hero-title"><span>CGC</span> FIELD ANSWER</div></div>
-      <div class="hero-sub" id="heroQuote">即答できる営業は、信頼される。 — 孫正義（実業家）</div>
-      <div class="search-box"><input id="searchInput" placeholder="例：紙の請求書 / 解約金 / WS" onkeydown="if(event.key==='Enter') searchKnowledge()"><button onclick="searchKnowledge()">検索</button></div>
-      <div class="filter-chips"><button class="chip active" onclick="filterCategory('all', this)">すべて</button><button class="chip" onclick="filterCategory('新電力', this)">新電力</button><button class="chip" onclick="filterCategory('WS', this)">WS</button><button class="chip" onclick="filterCategory('VOD', this)">VOD</button><button class="chip" onclick="filterCategory('営業', this)">営業</button></div>
-    </section>
+   <section class="hero page-section" id="search">
+  <div class="hero-brand">
+    <div class="hero-logo"></div>
+    <div class="hero-title"><span>CGC</span> FIELD ANSWER</div>
+  </div>
 
-    <section class="content">
-      <div id="results"><div class="section-head"><h2>検索結果 <span>0件</span></h2></div><div class="result-card"><div class="result-meta">検索してください</div><h3>キーワードを入力すると、登録済みナレッジを検索できます。</h3><p>例：他社電力の明細 / 解約金 / WS / VOD / 新電力</p></div></div>
+  <div class="hero-sub" id="heroQuote">
+    即答できる営業は、信頼される。 — 孫正義（実業家）
+  </div>
 
-      <div class="section-block" id="proposal"><div class="section-label"><div class="section-icon">＋</div><h2 class="panel-title">回答案を投稿</h2></div><div id="proposalForm"></div></div>
-      <div class="section-block" id="materials"><div class="section-label"><div class="section-icon">▶</div><h2 class="panel-title">教材ライブラリ</h2></div><div class="filter-chips" style="margin-bottom:12px;padding-top:0"><button class="chip active" onclick="filterMaterialCategory('all', this)">すべて</button><button class="chip" onclick="filterMaterialCategory('新電力', this)">新電力</button><button class="chip" onclick="filterMaterialCategory('WS', this)">WS</button><button class="chip" onclick="filterMaterialCategory('VOD', this)">VOD</button><button class="chip" onclick="filterMaterialCategory('営業', this)">営業</button><button class="chip" onclick="filterMaterialCategory('後確認', this)">後確認</button></div><div id="materialsList" class="materials-list"></div></div>
-      <div class="section-block" id="admin"><div class="section-label"><div class="section-icon">⚙</div><h2 class="panel-title">管理</h2></div><div id="adminArea"></div></div>
-      <div class="section-block" id="unanswered"><div class="section-label"><div class="section-icon">✉</div><h2 class="panel-title">未回答</h2></div><div id="requestList" class="unanswered-list"></div></div>
-      <div class="section-block" id="status"><div class="section-label"><div class="section-icon">◷</div><h2 class="panel-title">状況</h2></div><div class="stats-grid"><div class="stat-box"><small>登録ナレッジ</small><b id="knowledgeCount">0</b></div><div class="stat-box"><small>未回答質問</small><b id="requestCount">0</b></div><div class="stat-box"><small>審査中の回答案</small><b id="proposalCount">0</b></div></div></div>
-    </section>
-  </main>
-</div>
+  <div class="search-box">
+    <input id="searchInput" placeholder="例：紙の請求書 / 解約金 / WS" onkeydown="if(event.key==='Enter') searchKnowledge()">
+    <button onclick="searchKnowledge()">検索</button>
+  </div>
+
+  <div class="filter-chips">
+    <button class="chip active" onclick="filterCategory('all', this)">すべて</button>
+    <button class="chip" onclick="filterCategory('新電力', this)">新電力</button>
+    <button class="chip" onclick="filterCategory('WS', this)">WS</button>
+    <button class="chip" onclick="filterCategory('VOD', this)">VOD</button>
+    <button class="chip" onclick="filterCategory('営業', this)">営業</button>
+  </div>
+</section>
+
+<section class="content">
+
+  <div id="results">
+    <div class="section-head">
+      <h2>検索結果 <span>0件</span></h2>
+    </div>
+
+    <div class="result-card">
+      <div class="result-meta">検索してください</div>
+      <h3>キーワードを入力すると、登録済みナレッジを検索できます。</h3>
+      <p>例：他社電力の明細 / 解約金 / WS / VOD / 新電力</p>
+    </div>
+  </div>
+
+  <div class="section-block page-section" id="proposal" style="display:none">
+    <div class="section-label">
+      <div class="section-icon">＋</div>
+      <h2 class="panel-title">回答案を投稿</h2>
+    </div>
+
+    <div id="proposalForm"></div>
+  </div>
+
+  <div class="section-block page-section" id="materials" style="display:none">
+
+    <div class="section-label">
+      <div class="section-icon">▶</div>
+      <h2 class="panel-title">教材ライブラリ</h2>
+    </div>
+
+    <div class="filter-chips" style="margin-bottom:12px;padding-top:0">
+
+      <button class="chip active" onclick="filterMaterialCategory('all', this)">
+        すべて
+      </button>
+
+      <button class="chip" onclick="filterMaterialCategory('新電力', this)">
+        新電力
+      </button>
+
+      <button class="chip" onclick="filterMaterialCategory('WS', this)">
+        WS
+      </button>
+
+      <button class="chip" onclick="filterMaterialCategory('VOD', this)">
+        VOD
+      </button>
+
+      <button class="chip" onclick="filterMaterialCategory('営業', this)">
+        営業
+      </button>
+
+      <button class="chip" onclick="filterMaterialCategory('後確認', this)">
+        後確認
+      </button>
+
+    </div>
+
+    <div id="materialsList" class="materials-list"></div>
+  </div>
+
+  <div class="section-block page-section" id="admin" style="display:none">
+    <div class="section-label">
+      <div class="section-icon">⚙</div>
+      <h2 class="panel-title">管理</h2>
+    </div>
+
+    <div id="adminArea"></div>
+  </div>
+
+  <div class="section-block page-section" id="unanswered" style="display:none">
+    <div class="section-label">
+      <div class="section-icon">✉</div>
+      <h2 class="panel-title">未回答</h2>
+    </div>
+
+    <div id="requestList" class="unanswered-list"></div>
+  </div>
+
+  <div class="section-block page-section" id="status" style="display:none">
+
+    <div class="section-label">
+      <div class="section-icon">◷</div>
+      <h2 class="panel-title">状況</h2>
+    </div>
+
+    <div class="stats-grid">
+
+      <div class="stat-box">
+        <small>登録ナレッジ</small>
+        <b id="knowledgeCount">0</b>
+      </div>
+
+      <div class="stat-box">
+        <small>未回答質問</small>
+        <b id="requestCount">0</b>
+      </div>
+
+      <div class="stat-box">
+        <small>審査中の回答案</small>
+        <b id="proposalCount">0</b>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
 
 <script>
 let knowledge = [];

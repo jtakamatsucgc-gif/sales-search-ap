@@ -59,7 +59,10 @@ button{cursor:pointer}
 .help-card{margin-top:auto;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);border-radius:18px;padding:16px}
 .help-card b{display:block;font-size:13px;margin-bottom:8px}.help-card p{font-size:13px;color:#dbeafe}
 
-.main{padding:28px 32px 40px;background:radial-gradient(circle at top right,rgba(37,99,235,.12),transparent 35%),linear-gradient(180deg,#fff,#f8fafc)}
+.main{
+padding:28px 32px 40px;
+background:#f8fafc;
+}
 .topbar{display:flex;justify-content:flex-end;gap:16px;margin-bottom:18px}
 .top-icon{width:38px;height:38px;border-radius:50%;border:1px solid #dbe3ef;display:grid;place-items:center;background:#fff;color:#0f172a;font-weight:900;position:relative}
 .badge{position:absolute;top:-5px;right:-5px;background:#ef4444;color:white;font-size:11px;min-width:20px;height:20px;border-radius:50%;display:grid;place-items:center;padding:0 5px}
@@ -69,6 +72,7 @@ position:relative;
 overflow:hidden;
 border-radius:24px;
 min-height:300px;
+margin-top:env(safe-area-inset-top);
 }
 .background:linear-gradient(90deg,#03122f 0%,#07245b 44%,rgba(7,36,91,.78) 64%,rgba(255,255,255,.05) 100%),radial-gradient(circle at 62% 62%,rgba(59,130,246,.55),transparent 28%);padding:44px 44px 28px;color:white;box-shadow:0 26px 70px rgba(15,23,42,.18);border:1px solid rgba(37,99,235,.18)}
 .hero::before{content:"";position:absolute;right:0;top:0;width:44%;height:100%;background:linear-gradient(90deg,rgba(3,18,47,.45),transparent 30%),radial-gradient(circle at 55% 35%,rgba(255,255,255,.28),transparent 18%);opacity:.9}

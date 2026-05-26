@@ -315,7 +315,7 @@ function unlockAdmin(){
 function lockAdmin(){ localStorage.removeItem('adminUnlocked'); renderAdmin(); }
 
 async function loadData(){
-  const answersResult = await supabaseClient.from('回答').select('*').order('created_at', { ascending:false });
+  const answersResult = await supabaseClient.from('回答案').select('*').order('created_at', { ascending:false });
   const unansweredResult = await supabaseClient.from('未回答').select('*').order('created_at', { ascending:false });
   if(answersResult.error){ console.error(answersResult.error); alert('回答データの読み込みに失敗しました。'); return; }
   if(unansweredResult.error){ console.error(unansweredResult.error); alert('未回答データの読み込みに失敗しました。'); return; }

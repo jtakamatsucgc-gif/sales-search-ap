@@ -392,39 +392,17 @@ function renderRequests(){
     requestList.innerHTML = `<div class="mini-card"><b>未回答質問はありません</b><small>該当なしの質問が送信されるとここに表示されます。</small></div>`;
     return;
   }
+
   requestList.innerHTML = requests.map(item => `
     <div class="mini-card">
       <b>${safeText(getQuestion(item))}</b>
       <small>${safeText(getStatus(item))} / ${safeText(getDate(item))}</small>
-      <div class="btn-row">
-        <button class="primary-btn" onclick="generateDraft('${item.id}', '${safeArg(getQuestion(item))}')">AI下書きを作成</button>
-      </div>
-      ${getAiAnswer(item) ? `<div class="ai-box"><div class="ai-label">AI回答案</div><div class="ai-text">${safeText(getAiAnswer(item))}</div>${getAiUrl(item) ? `<a class="ref-link" href="${safeText(getAiUrl(item))}" target="_blank">↗ AI参考URLを開く</a>` : ''}${getAiMemo(item) ? `<div class="ai-box"><div class="ai-label">AI判断メモ</div><div class="ai-text">${safeText(getAiMemo(item))}</div></div>` : ''}<div class="btn-row"><button class="primary-btn" onclick="publishDraft('${item.id}')">掲載する</button><button class="secondary-btn" onclick="generateDraft('${item.id}', '${safeArg(getQuestion(item))}')">再生成</button></div></div>` : ''}
-    </div>`).join('');
+    </div>
+  `).join('');
 }
-async function generateDraft(id, question){
-  try{
-    const response = await fetch('/api/generate-draft', { method:'POST', headers:{ 'Content-Type':'application/json' }, body:JSON.stringify({ question }) });
-    const data = await response.json();
-    if(!response.ok || data.error){ alert(data.error || 'AI生成に失敗しました'); return; }
-    const { error } = await supabaseClient.from('未回答').update({ 'AIの回答案': data.answer || '', 'AI参考URL': data.url || '', 'AI判断メモ': data.memo || '', '状態': 'AI下書き作成済み' }).eq('id', id);
-    if(error){ console.error(error); alert('AI下書きの保存に失敗しました'); return; }
-    alert('AI下書きを作成しました'); await loadData();
-  }catch(err){ console.error(err); alert('AI生成エラー'); }
-}
-async function publishDraft(id){
-  if(!isAdmin()){ alert('掲載するには管理ログインしてください'); document.getElementById('admin').scrollIntoView({behavior:'smooth'}); return; }
-  const item = requests.find(req => String(req.id) === String(id));
-  if(!item){ alert('対象の未回答が見つかりません'); return; }
-  if(!getAiAnswer(item)){ alert('先にAI下書きを作成してください'); return; }
-  const category = prompt('カテゴリを入力してください（新電力 / WS / VOD / その他）', 'その他') || 'その他';
-  const { error: insertError } = await supabaseClient.from('回答').insert([{ '質問': getQuestion(item), '答え': getAiAnswer(item), 'カテゴリ': category, '参考URL': getAiUrl(item), '判断メモ': getAiMemo(item) }]);
-  if(insertError){ console.error(insertError); alert('掲載に失敗しました'); return; }
-  const { error: updateError } = await supabaseClient.from('未回答').update({ '状態': '掲載済み' }).eq('id', id);
-  if(updateError){ console.error(updateError); }
-  alert('回答に掲載しました'); await loadData();
-}
+
 window.addEventListener('DOMContentLoaded', async () => { setHeroQuote(); renderAdmin(); await loadData(); });
 </script>
 </body>
 </html>
+

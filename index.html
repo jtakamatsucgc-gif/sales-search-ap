@@ -10,26 +10,12 @@
 
 <script>
 const SUPABASE_URL = 'https://aknclbhplcplkgbktfkw.supabase.co'
-
 const SUPABASE_KEY = 'sb_publishable_Hsc_-eDUTO96dWQSIfXU1A_SjuWRNjg'
 
 const supabaseClient = supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 )
-
-window.addEventListener("DOMContentLoaded", () => {
-  document.body.innerHTML += `
-    <p style="
-      padding:10px;
-      color:lime;
-      font-weight:bold;
-      text-align:center;
-    ">
-      Supabase接続OK
-    </p>
-  `
-})
 </script>
 
 <style>
@@ -187,17 +173,6 @@ select option{
   cursor:pointer;
 }
 
-.sub-btn{
-  border:none;
-  border-radius:18px;
-  padding:14px;
-  font-size:15px;
-  font-weight:700;
-  background:rgba(255,255,255,0.08);
-  color:white;
-  cursor:pointer;
-}
-
 .card{
   background:rgba(255,255,255,0.06);
   border:1px solid rgba(255,255,255,0.08);
@@ -254,6 +229,13 @@ select option{
   margin:18px 0;
 }
 
+.status-ok{
+  text-align:center;
+  color:#22c55e;
+  font-size:12px;
+  margin-top:8px;
+}
+
 @media (min-width:760px){
   .two-col{
     display:grid;
@@ -270,6 +252,7 @@ select option{
 <div class="header">
   <div class="title">CS事業部ナレッジOS</div>
   <div class="subtitle">営業現場 即答支援システム</div>
+  <div class="status-ok">Supabase接続OK</div>
 </div>
 
 <div class="container">
@@ -312,7 +295,7 @@ select option{
       <div class="card">
         <div class="admin-grid">
 
-          <input id="newKeyword" placeholder="キーワード">
+          <input id="newKeyword" placeholder="質問・キーワード">
 
           <select id="newCategory">
             <option>契約</option>
@@ -324,8 +307,6 @@ select option{
           </select>
 
           <textarea id="newAnswer" rows="5" placeholder="回答内容"></textarea>
-
-          <textarea id="newNotice" rows="3" placeholder="注意点"></textarea>
 
           <button class="main-btn" onclick="addKnowledge()">追加する</button>
 
@@ -343,6 +324,9 @@ select option{
 </div>
 
 <script>
+let knowledge = [];
+let requests = [];
+
 const heroMessages = [
   {title:"即答できる営業は信頼される。", text:"現場の知識を、会社の資産へ。"},
   {title:"今日の1件が流れを変える。", text:"迷う前に検索。止まる前に確認。"},
@@ -354,37 +338,50 @@ const heroMessages = [
   {title:"迷った方が負ける。まず踏み込め。", text:"確認速度が営業速度。"}
 ];
 
-let lastIndex = localStorage.getItem("lastHeroIndex");
-let randomIndex;
+function setHeroMessage(){
+  let lastIndex = localStorage.getItem("lastHeroIndex");
+  let randomIndex;
 
-do{
-  randomIndex = Math.floor(Math.random() * heroMessages.length);
-}while(String(randomIndex) === lastIndex && heroMessages.length > 1);
+  do{
+    randomIndex = Math.floor(Math.random() * heroMessages.length);
+  }while(String(randomIndex) === lastIndex && heroMessages.length > 1);
 
-localStorage.setItem("lastHeroIndex", randomIndex);
+  localStorage.setItem("lastHeroIndex", randomIndex);
 
-window.addEventListener("DOMContentLoaded", () => {
   const randomMessage = heroMessages[randomIndex];
   document.getElementById("heroTitle").innerText = randomMessage.title;
   document.getElementById("heroText").innerText = randomMessage.text;
-});
-
-let knowledge = JSON.parse(localStorage.getItem("knowledgeDB")) || [
-{
-  keyword:"違約金",
-  category:"契約",
-  answer:"・供給開始から1年以内は違約金発生\n・引越し解約は対象外",
-  notice:"旧プランは別条件の可能性あり"
 }
-];
 
-let requests = JSON.parse(localStorage.getItem("requestDB")) || [];
+async function loadData(){
+  const answersResult = await supabaseClient
+    .from("回答")
+    .select("*")
+    .order("created_at", { ascending:false });
 
-function saveData(){
-  localStorage.setItem("knowledgeDB", JSON.stringify(knowledge));
-  localStorage.setItem("requestDB", JSON.stringify(requests));
+  const unansweredResult = await supabaseClient
+    .from("未回答")
+    .select("*")
+    .order("created_at", { ascending:false });
+
+  if(answersResult.error){
+    console.error(answersResult.error);
+    alert("回答データの読み込みに失敗しました。RLS設定を確認してください。");
+    return;
+  }
+
+  if(unansweredResult.error){
+    console.error(unansweredResult.error);
+    alert("未回答データの読み込みに失敗しました。RLS設定を確認してください。");
+    return;
+  }
+
+  knowledge = answersResult.data || [];
+  requests = unansweredResult.data || [];
+
   updateStats();
   renderRequests();
+  searchKnowledge();
 }
 
 function updateStats(){
@@ -392,15 +389,45 @@ function updateStats(){
   document.getElementById("requestCount").innerText = requests.length;
 }
 
+function getQuestion(item){
+  return item["質問"] || item.question || item.keyword || "";
+}
+
+function getAnswer(item){
+  return item["答え"] || item.answer || "";
+}
+
+function getCategory(item){
+  return item["カテゴリ"] || item.category || "未分類";
+}
+
+function getDate(item){
+  return item.created_at || item["日時"] || item.date || "";
+}
+
 function searchKnowledge(){
   const input = document.getElementById("searchInput").value.toLowerCase().trim();
   const results = document.getElementById("results");
 
-  const filtered = knowledge.filter(item =>
-    item.keyword.toLowerCase().includes(input) ||
-    item.answer.toLowerCase().includes(input) ||
-    item.category.toLowerCase().includes(input)
-  );
+  if(!input){
+    results.innerHTML = `
+      <div class="card">
+        <div class="card-title">検索してください</div>
+        <div class="answer">キーワードを入れると、登録済みの回答を検索できます。</div>
+      </div>
+    `;
+    return;
+  }
+
+  const filtered = knowledge.filter(item => {
+    const question = getQuestion(item).toLowerCase();
+    const answer = getAnswer(item).toLowerCase();
+    const category = getCategory(item).toLowerCase();
+
+    return question.includes(input) ||
+           answer.includes(input) ||
+           category.includes(input);
+  });
 
   if(filtered.length === 0){
     results.innerHTML = `
@@ -418,34 +445,44 @@ function searchKnowledge(){
 
   results.innerHTML = filtered.map(item => `
     <div class="card">
-      <div class="tag">${item.category}</div>
-      <div class="card-title">${item.keyword}</div>
-      <div class="answer">${item.answer}</div>
-      <div class="notice">注意点：${item.notice || "なし"}</div>
+      <div class="tag">${getCategory(item)}</div>
+      <div class="card-title">${getQuestion(item)}</div>
+      <div class="answer">${getAnswer(item)}</div>
     </div>
   `).join("");
 }
 
-function addKnowledge(){
-  const keyword = document.getElementById("newKeyword").value.trim();
+async function addKnowledge(){
+  const question = document.getElementById("newKeyword").value.trim();
   const category = document.getElementById("newCategory").value;
   const answer = document.getElementById("newAnswer").value.trim();
-  const notice = document.getElementById("newNotice").value.trim();
 
-  if(!keyword || !answer){
-    alert("キーワードと回答を入力してください");
+  if(!question || !answer){
+    alert("質問・キーワードと回答を入力してください");
     return;
   }
 
-  knowledge.unshift({keyword, category, answer, notice});
-  saveData();
+  const { error } = await supabaseClient
+    .from("回答")
+    .insert([
+      {
+        "質問": question,
+        "答え": answer,
+        "カテゴリ": category
+      }
+    ]);
+
+  if(error){
+    console.error(error);
+    alert("追加に失敗しました。RLS設定か列名を確認してください。");
+    return;
+  }
 
   document.getElementById("newKeyword").value = "";
   document.getElementById("newAnswer").value = "";
-  document.getElementById("newNotice").value = "";
 
-  alert("追加しました");
-  searchKnowledge();
+  alert("Supabaseに追加しました");
+  await loadData();
 }
 
 async function submitRequest(text){
@@ -454,17 +491,22 @@ async function submitRequest(text){
     return;
   }
 
-  const payload = {
-    question:text,
-    date:new Date().toLocaleString(),
-    source:"CS事業部ナレッジOS",
-    userAgent:navigator.userAgent
-  };
+  const { error } = await supabaseClient
+    .from("未回答")
+    .insert([
+      {
+        "質問": text
+      }
+    ]);
 
-  requests.unshift(payload);
-  saveData();
+  if(error){
+    console.error(error);
+    alert("未回答の保存に失敗しました。RLS設定か列名を確認してください。");
+    return;
+  }
 
-  alert("質問を保存しました");
+  alert("未回答としてSupabaseに保存しました");
+  await loadData();
 }
 
 function renderRequests(){
@@ -482,15 +524,16 @@ function renderRequests(){
 
   requestList.innerHTML = requests.map(item => `
     <div class="card">
-      <div class="card-title">${item.question}</div>
-      <div class="notice">${item.date}</div>
+      <div class="card-title">${getQuestion(item)}</div>
+      <div class="notice">${getDate(item)}</div>
     </div>
   `).join("");
 }
 
-updateStats();
-renderRequests();
-searchKnowledge();
+window.addEventListener("DOMContentLoaded", async () => {
+  setHeroMessage();
+  await loadData();
+});
 </script>
 
 </body>

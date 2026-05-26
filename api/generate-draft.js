@@ -6,6 +6,14 @@ export default async function handler(req, res) {
   try {
     const { question } = req.body
 
+    if (!question) {
+      return res.status(400).json({ error: 'question がありません' })
+    }
+
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(500).json({ error: 'OPENAI_API_KEY が設定されていません' })
+    }
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -29,6 +37,8 @@ export default async function handler(req, res) {
 }
 
 営業現場で即使える、短く実用的な内容にしてください。
+参考URLが不明な場合は空文字にしてください。
+判断メモには「なぜその回答になるか」「確認すべき注意点」を入れてください。
             `
           },
           {
@@ -42,14 +52,25 @@ export default async function handler(req, res) {
 
     const data = await response.json()
 
-    const content = data.choices[0].message.content
+    if (!response.ok) {
+      console.error(data)
+      return res.status(response.status).json({
+        error: data.error?.message || 'OpenAI APIエラー'
+      })
+    }
+
+    const content = data.choices?.[0]?.message?.content
+
+    if (!content) {
+      return res.status(500).json({ error: 'AIの返答が空です' })
+    }
 
     return res.status(200).json(JSON.parse(content))
 
   } catch (error) {
     console.error(error)
     return res.status(500).json({
-      error: 'AI生成失敗'
+      error: error.message || 'AI生成失敗'
     })
   }
 }

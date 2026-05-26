@@ -253,10 +253,10 @@ async function loadData(){
   const unansweredResult=await supabaseClient.from('未回答').select('*').order('created_at',{ascending:false});
   const proposalsResult=await supabaseClient.from('回答案').select('*').order('created_at',{ascending:false});
   const materialsResult=await supabaseClient.from('教材').select('*').order('created_at',{ascending:false});
-  if(answersResult.error){console.error(answersResult.error);alert('回答データの読み込みに失敗しました。');return;}
-  if(unansweredResult.error){console.error(unansweredResult.error);alert('未回答データの読み込みに失敗しました。');return;}
-  if(proposalsResult.error){console.error(proposalsResult.error);alert('回答案データの読み込みに失敗しました。');return;}
-  if(materialsResult.error){console.error(materialsResult.error);alert('教材データの読み込みに失敗しました。');return;}
+  if(answersResult.error){console.error(answersResult.error);alert('回答データの読み込みに失敗しました。'+ error.message);return;}
+  if(unansweredResult.error){console.error(unansweredResult.error);alert('未回答データの読み込みに失敗しました。'+ error.message);return;}
+  if(proposalsResult.error){console.error(proposalsResult.error);alert('回答案データの読み込みに失敗しました。'+ error.message);return;}
+  if(materialsResult.error){console.error(materialsResult.error);alert('教材データの読み込みに失敗しました。'+ error.message);return;}
   knowledge=answersResult.data||[];requests=unansweredResult.data||[];proposals=proposalsResult.data||[];materials=materialsResult.data||[];
   updateStats();renderRequests();renderProposalForm();renderAdmin();renderMaterials();searchKnowledge(false);
 }
@@ -278,7 +278,7 @@ async function submitProposal(){
   const question=document.getElementById('proposalQuestion').value.trim();const category=document.getElementById('proposalCategory').value;const answer=document.getElementById('proposalAnswer').value.trim();const url=document.getElementById('proposalUrl').value.trim();
   if(!question||!answer||!category){alert('質問・回答案・カテゴリを入力してください');return;}
   const {error}=await supabaseClient.from('回答案').insert([{ '質問':question,'答え':answer,'カテゴリ':category,'参考URL':url,'状態':'審査中'}]);
-  if(error){console.error(error);alert('回答案の投稿に失敗しました');return;}
+  if(error){console.error(error);alert('回答案の投稿に失敗しました'+ error.message);return;}
   alert('回答案を投稿しました。管理者確認後に公開されます。');
   document.getElementById('proposalQuestion').value='';document.getElementById('proposalAnswer').value='';document.getElementById('proposalUrl').value='';
   await loadData();

@@ -260,7 +260,7 @@ async function loadData(){
   knowledge=answersResult.data||[];requests=unansweredResult.data||[];proposals=proposalsResult.data||[];materials=materialsResult.data||[];
   updateStats();renderRequests();renderProposalForm();renderAdmin();renderMaterials();searchKnowledge(false);
 }
-function updateStats(){const pending=proposals.filter(item=>getStatus(item)==='審査中').length;document.getElementById('knowledgeCount').innerText=knowledge.length;document.getElementById('requestCount').innerText=requests.length;document.getElementById('proposalCount').innerText=pending;document.getElementById('proposalBadge').innerText=pending;}
+function updateStats(){const pending=proposals.filter(item=>getStatus(item).includes('審査中')).length;document.getElementById('knowledgeCount').innerText=knowledge.length;document.getElementById('requestCount').innerText=requests.length;document.getElementById('proposalCount').innerText=pending;document.getElementById('proposalBadge').innerText=pending;}
 function filterCategory(category,element){currentCategory=category;document.querySelectorAll('#search .chip').forEach(chip=>chip.classList.remove('active'));if(element)element.classList.add('active');searchKnowledge(false);}
 function filterMaterialCategory(category,element){currentMaterialCategory=category;document.querySelectorAll('#materials .chip').forEach(chip=>chip.classList.remove('active'));if(element)element.classList.add('active');renderMaterials();}
 

@@ -164,7 +164,7 @@ html{
 .nav{
   width:100%;
   display:grid;
-  grid-template-columns:repeat(6,1fr);
+  grid-template-columns:repeat(5,1fr);
   gap:2px;
   align-items:center;
 }
@@ -382,27 +382,13 @@ html{
 <div class="app">
   <aside class="sidebar">
     <div><div class="brand-mark"></div><div class="brand-name">CGC<br>FIELD<br>ANSWER</div></div>
-   <a class="nav-item" onclick="showPage('materials',this)">
-    <span class="nav-icon">▶</span>
-    教材
-  </a>
-
-  <a class="nav-item" onclick="showPage('admin',this)">
-    <span class="nav-icon">⚙</span>
-    管理
-  </a>
-
-  <a class="nav-item" onclick="showPage('unanswered',this)">
-    <span class="nav-icon">✉</span>
-    未回答
-  </a>
-
-  <a class="nav-item" onclick="showPage('status',this)">
-    <span class="nav-icon">◷</span>
-    状況
-  </a>
-
-</nav>
+    <nav class="nav">
+      <a class="nav-item active" onclick="showPage('search',this)"><span class="nav-icon">⌕</span>検索</a>
+      <a class="nav-item" onclick="showPage('materials',this)"><span class="nav-icon">▶</span>教材</a>
+      <a class="nav-item" onclick="showPage('admin',this)"><span class="nav-icon">⚙</span>管理</a>
+      <a class="nav-item" onclick="showPage('unanswered',this)"><span class="nav-icon">✉</span>未回答</a>
+      <a class="nav-item" onclick="showPage('status',this)"><span class="nav-icon">◷</span>状況</a>
+    </nav>
     <div class="help-card"><b>FIELD ANSWER</b><p>現場の質問を、チームの資産へ。</p></div>
   </aside>
 
@@ -434,7 +420,7 @@ html{
 
 <section class="content">
 
-  <div id="results">
+  <div id="results" class="page-section">
     <div class="section-head">
       <h2>検索結果 <span>0件</span></h2>
     </div>
@@ -540,6 +526,8 @@ html{
   </div>
 
 </section>
+  </main>
+</div>
 
 <script>
 let knowledge = [];
@@ -742,7 +730,44 @@ function renderMaterials(){
   if(visible.length===0){list.innerHTML=`<div class="mini-card"><b>教材はまだありません</b><small>管理画面からYouTubeやPDFのURLを追加できます。</small></div>`;return;}
   list.innerHTML=visible.map(item=>`<a class="mini-card material-card" href="${safeText(item['URL']||'')}" target="_blank"><div class="material-type">${safeText(item['種別']||'教材')}</div><div class="material-title">${safeText(item['タイトル']||'無題')}</div><div class="material-category">${safeText(getCategory(item))}</div></a>`).join('');
 }
-window.addEventListener('DOMContentLoaded',async()=>{setHeroQuote();renderProposalForm();renderAdmin();await loadData();});
+function showPage(pageId,element){
+  document.querySelectorAll('.page-section').forEach(section=>{
+    section.style.display='none';
+  });
+
+  const target=document.getElementById(pageId);
+  if(target){
+    target.style.display='block';
+  }
+
+  if(pageId==='search'){
+    const results=document.getElementById('results');
+    if(results){
+      results.style.display='block';
+    }
+  }
+
+  document.querySelectorAll('.nav-item').forEach(item=>{
+    item.classList.remove('active');
+  });
+
+  if(element){
+    element.classList.add('active');
+  }
+
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  });
+}
+
+window.addEventListener('DOMContentLoaded',async()=>{
+  setHeroQuote();
+  renderProposalForm();
+  renderAdmin();
+  await loadData();
+  showPage('search',document.querySelector('.nav-item.active'));
+});
 </script>
 </body>
 </html>

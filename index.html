@@ -100,6 +100,17 @@ border:1px solid rgba(37,99,235,.18)
 .filter-chips{position:relative;z-index:2;display:flex;gap:10px;overflow:auto;padding-top:16px;scrollbar-width:none}.filter-chips::-webkit-scrollbar{display:none}
 .chip{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);color:white;padding:10px 14px;border-radius:999px;white-space:nowrap;font-size:13px;font-weight:900;backdrop-filter:blur(10px)}.chip.active{background:#fff;color:#0b63ff;border-color:#fff}
 
+#materials .chip{
+  border:1px solid #cbd5e1;
+  background:#ffffff;
+  color:#0f172a;
+}
+#materials .chip.active{
+  background:#0b63ff;
+  color:#ffffff;
+  border-color:#0b63ff;
+}
+
 .content{display:block;margin-top:18px}.section-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 14px}.section-head h2{font-size:24px;font-weight:1000;letter-spacing:-.04em}.section-head span{color:#475569;font-size:15px;margin-left:10px;font-weight:700}
 .result-card,.panel-card,.mini-card,.stat-box{background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:20px 22px;margin-bottom:12px;box-shadow:0 14px 42px rgba(15,23,42,.06)}
 .result-meta{color:#0b63ff;font-weight:900;font-size:13px;margin-bottom:8px}.result-card h3{font-size:21px;font-weight:1000;letter-spacing:-.035em;margin-bottom:6px}.result-card p{color:#334155;font-size:15px;white-space:pre-line}
@@ -474,6 +485,10 @@ html{
         後確認
       </button>
 
+      <button class="chip" onclick="filterMaterialCategory('資料・スクリプト', this)">
+        資料・スクリプト
+      </button>
+
     </div>
 
     <div id="materialsList" class="materials-list"></div>
@@ -647,7 +662,7 @@ function renderAdmin(){
         <input id="newMaterialTitle" placeholder="教材タイトル">
         <input id="newMaterialUrl" placeholder="YouTube / PDF / 資料URL">
         <select id="newMaterialType"><option>動画</option><option>PDF</option><option>資料</option></select>
-        <select id="newMaterialCategory"><option>新電力</option><option>WS</option><option>VOD</option><option>営業</option><option>後確認</option><option>その他</option></select>
+        <select id="newMaterialCategory"><option>新電力</option><option>WS</option><option>VOD</option><option>営業</option><option>後確認</option><option>資料・スクリプト</option><option>その他</option></select>
         <button class="primary-btn" onclick="addMaterial()">教材を追加する</button>
       </div>
     </div>
@@ -724,11 +739,51 @@ async function addMaterial(){
   if(error){console.error(error);alert('教材追加に失敗しました');return;}
   alert('教材を追加しました');await loadData();
 }
+async function deleteMaterial(id){
+  if(!isAdmin()){
+    alert('管理ログインしてください');
+    return;
+  }
+
+  if(!confirm('教材を削除しますか？')){
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from('教材')
+    .delete()
+    .eq('id', id);
+
+  if(error){
+    console.error(error);
+    alert('教材削除に失敗しました');
+    return;
+  }
+
+  alert('教材を削除しました');
+  await loadData();
+}
 function renderMaterials(){
   const list=document.getElementById('materialsList');
   const visible=materials.filter(item=>getStatus(item)==='公開').filter(item=>currentMaterialCategory==='all'?true:normalizeText(getCategory(item)).includes(normalizeText(currentMaterialCategory)));
   if(visible.length===0){list.innerHTML=`<div class="mini-card"><b>教材はまだありません</b><small>管理画面からYouTubeやPDFのURLを追加できます。</small></div>`;return;}
-  list.innerHTML=visible.map(item=>`<a class="mini-card material-card" href="${safeText(item['URL']||'')}" target="_blank"><div class="material-type">${safeText(item['種別']||'教材')}</div><div class="material-title">${safeText(item['タイトル']||'無題')}</div><div class="material-category">${safeText(getCategory(item))}</div></a>`).join('');
+  list.innerHTML=visible.map(item=>`
+    <div class="mini-card">
+      <a class="material-card" href="${safeText(item['URL']||'')}" target="_blank">
+        <div class="material-type">${safeText(item['種別']||'教材')}</div>
+        <div class="material-title">${safeText(item['タイトル']||'無題')}</div>
+        <div class="material-category">${safeText(getCategory(item))}</div>
+      </a>
+
+      ${isAdmin() ? `
+        <div class="btn-row">
+          <button class="danger-btn" onclick="deleteMaterial('${item.id}')">
+            削除
+          </button>
+        </div>
+      ` : ''}
+    </div>
+  `).join('');
 }
 function showPage(pageId,element){
   document.querySelectorAll('.page-section').forEach(section=>{

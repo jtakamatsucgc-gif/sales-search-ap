@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -181,7 +182,7 @@ border:1px solid rgba(37,99,235,.18)
 .form-grid{display:grid;gap:12px}.form-grid input,.form-grid textarea,.form-grid select{width:100%;padding:14px 15px;border-radius:14px;border:1px solid #dbe3ef;background:#fff;color:#0f172a;font-size:15px;outline:none}.form-grid textarea{min-height:120px;resize:vertical}
 .primary-btn,.secondary-btn,.danger-btn{border:0;border-radius:14px;padding:14px 16px;font-size:15px;font-weight:900}.primary-btn{background:#0b63ff;color:#fff}.secondary-btn{background:#eef4fb;color:#0f172a;border:1px solid #dbe3ef}.danger-btn{background:#fee2e2;color:#991b1b}
 .status-line,.notice{color:#64748b;font-size:13px;margin-top:8px}.unanswered-list,.proposal-list,.materials-list{display:grid;gap:12px}.mini-card b{display:block;font-size:16px;margin-bottom:4px}.mini-card small{color:#64748b}.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.ref-link{display:inline-flex;align-items:center;gap:8px;background:#eff6ff;color:#1d4ed8;padding:10px 14px;border-radius:12px;text-decoration:none;font-weight:900;font-size:14px;margin-top:12px}.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat-box small{color:#64748b;font-weight:800}.stat-box b{display:block;font-size:32px;line-height:1.1;margin-top:6px}.review-box{margin-top:12px;padding:14px;border-radius:14px;background:#f8fafc;border:1px solid #dbeafe}.review-label{font-size:12px;font-weight:900;color:#2563eb;margin-bottom:6px}.review-text{font-size:14px;color:#334155;white-space:pre-line;line-height:1.8}
-.material-card{display:block;text-decoration:none;color:#0f172a;max-width:100%;overflow:hidden}.material-card:hover{transform:translateY(-1px)}.material-type{display:inline-block;background:#0b63ff;color:#fff;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:900;margin-bottom:10px}.material-title{font-size:18px;font-weight:1000;margin-bottom:6px;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:break-word;line-height:1.45}.material-category{font-size:13px;color:#64748b;font-weight:800}.materials-list .mini-card{max-width:100%;overflow:hidden}#materials{max-width:100%;overflow:hidden}#materials .filter-chips{max-width:100%;overflow-x:auto;overflow-y:hidden;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;touch-action:pan-x;padding-bottom:4px}#materials .filter-chips .chip{flex:0 0 auto}.order-list{display:grid;gap:10px}.order-item{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border:1px solid #e2e8f0;border-radius:16px;padding:14px;background:#fff}.order-title{font-weight:1000;font-size:15px;line-height:1.5}.order-meta{font-size:12px;color:#64748b;font-weight:800}.order-buttons{display:flex;gap:6px}.order-btn{border:1px solid #dbe3ef;background:#eef4fb;color:#0f172a;border-radius:12px;padding:10px 12px;font-size:14px;font-weight:1000}
+.material-card{display:block;text-decoration:none;color:#0f172a;max-width:100%;overflow:hidden}.material-card:hover{transform:translateY(-1px)}.material-type{display:inline-block;background:#0b63ff;color:#fff;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:900;margin-bottom:10px}.material-title{font-size:18px;font-weight:1000;margin-bottom:6px;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:break-word;line-height:1.45}.material-category{font-size:13px;color:#64748b;font-weight:800}.materials-list .mini-card{max-width:100%;overflow:hidden}#materials{max-width:100%;overflow:hidden}#materials .filter-chips{max-width:100%;overflow-x:auto;overflow-y:hidden;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;touch-action:pan-x;padding-bottom:4px}#materials .filter-chips .chip{flex:0 0 auto}.order-list{display:grid;gap:10px}.order-item{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border:1px solid #e2e8f0;border-radius:16px;padding:14px;background:#fff}.order-title{font-weight:1000;font-size:15px;line-height:1.5}.order-meta{font-size:12px;color:#64748b;font-weight:800}.order-buttons{display:flex;gap:6px}.order-btn{border:1px solid #dbe3ef;background:#eef4fb;color:#0f172a;border-radius:12px;padding:10px 12px;font-size:14px;font-weight:1000}.drag-handle{touch-action:none}.sortable-ghost{opacity:.45}.sortable-chosen{box-shadow:0 18px 50px rgba(15,23,42,.16)}
 
 @media(max-width:980px){
 
@@ -1042,9 +1043,14 @@ async function moveMaterial(id,direction){
 function renderMaterials(){
   const list=document.getElementById('materialsList');
   const visible=sortMaterials(materials).filter(item=>getStatus(item)==='公開').filter(item=>currentMaterialCategory==='all'?true:normalizeText(getCategory(item)).includes(normalizeText(currentMaterialCategory)));
-  if(visible.length===0){list.innerHTML=`<div class="mini-card"><b>教材・資料はまだありません</b><small>管理画面からYouTubeやPDFのURLを追加できます。</small></div>`;return;}
+
+  if(visible.length===0){
+    list.innerHTML=`<div class="mini-card"><b>教材・資料はまだありません</b><small>管理画面からYouTubeやPDFのURLを追加できます。</small></div>`;
+    return;
+  }
+
   list.innerHTML=visible.map(item=>`
-    <div class="mini-card">
+    <div class="mini-card" data-id="${item.id}">
       <a class="material-card" href="${safeText(item['URL']||'')}" target="_blank">
         <div class="material-type">${safeText(item['種別']||'教材')}</div>
         <div class="material-title">${safeText(item['タイトル']||'無題')}</div>
@@ -1060,7 +1066,8 @@ function renderMaterials(){
           </button>
 
           <button
-            onclick="moveMaterial('${item.id}','up')"
+            class="drag-handle"
+            type="button"
             style="border:1px solid #dbe3ef;background:#eef4fb;color:#0f172a;border-radius:8px;padding:4px 8px;font-size:11px;font-weight:900;min-width:auto;cursor:grab">
             ☰
           </button>
@@ -1068,6 +1075,37 @@ function renderMaterials(){
       ` : ''}
     </div>
   `).join('');
+
+  if(isAdmin() && window.Sortable){
+    new Sortable(list,{
+      animation:150,
+      handle:'.drag-handle',
+      ghostClass:'sortable-ghost',
+      chosenClass:'sortable-chosen',
+
+      async onEnd(){
+        const cards=[...list.querySelectorAll('[data-id]')];
+
+        const updates=cards.map((card,index)=>
+          supabaseClient
+            .from('教材')
+            .update({ '表示順': index+1 })
+            .eq('id', card.dataset.id)
+        );
+
+        const results=await Promise.all(updates);
+        const failed=results.find(result=>result.error);
+
+        if(failed){
+          console.error(failed.error);
+          alert('表示順の更新に失敗しました');
+          return;
+        }
+
+        await loadData();
+      }
+    });
+  }
 }
 function showPage(pageId,element){
   document.querySelectorAll('.page-section').forEach(section=>{

@@ -19,6 +19,8 @@
 const SUPABASE_URL = 'https://aknclbhplcplkgbktfkw.supabase.co'
 const SUPABASE_KEY = 'sb_publishable_Hsc_-eDUTO96dWQSIfXU1A_SjuWRNjg'
 const ADMIN_PASSWORD = 'cgc12345'
+const APP_PASSWORD = 'cgc12345'
+const PASSWORD_VERSION = 'v1'
 
 const supabaseClient = supabase.createClient(
   SUPABASE_URL,
@@ -39,6 +41,66 @@ body{
 
   overflow-x:hidden;
 }
+
+.auth-locked .app{display:none}
+.login-screen{
+  display:none;
+  min-height:100dvh;
+  padding:24px;
+  background:linear-gradient(180deg,#03122f,#062a66 55%,#021024);
+  color:white;
+  place-items:center;
+}
+.auth-locked .login-screen{display:grid}
+.login-card{
+  width:100%;
+  max-width:420px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:24px;
+  padding:28px;
+  box-shadow:0 24px 80px rgba(0,0,0,.28);
+}
+.login-title{
+  font-size:28px;
+  font-weight:1000;
+  letter-spacing:-.04em;
+  line-height:1.05;
+  margin-bottom:10px;
+}
+.login-sub{
+  color:#dbeafe;
+  font-size:14px;
+  font-weight:700;
+  margin-bottom:18px;
+}
+.login-input{
+  width:100%;
+  border:0;
+  outline:0;
+  border-radius:16px;
+  padding:16px;
+  font-size:17px;
+  margin-bottom:12px;
+}
+.login-btn{
+  width:100%;
+  border:0;
+  border-radius:16px;
+  padding:16px;
+  background:#0b63ff;
+  color:white;
+  font-size:16px;
+  font-weight:1000;
+}
+.login-error{
+  display:none;
+  color:#fecaca;
+  font-size:13px;
+  font-weight:800;
+  margin-top:12px;
+}
+
 button,input,textarea,select{font-family:inherit}
 button{cursor:pointer}
 .app{min-height:100vh;display:grid;grid-template-columns:260px 1fr;background:#f8fafc}
@@ -421,13 +483,24 @@ html{
 </style>
 </head>
 
-<body>
+<body class="auth-locked">
+
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-title">CGC<br>FIELD ANSWER</div>
+    <div class="login-sub">パスワードを入力してください</div>
+    <input id="appPasswordInput" class="login-input" type="password" placeholder="パスワード" onkeydown="if(event.key==='Enter') loginApp()">
+    <button class="login-btn" onclick="loginApp()">ログイン</button>
+    <div id="loginError" class="login-error">パスワードが違います</div>
+  </div>
+</div>
+
 <div class="app">
   <aside class="sidebar">
     <div><div class="brand-mark"></div><div class="brand-name">CGC<br>FIELD<br>ANSWER</div></div>
     <nav class="nav">
       <a class="nav-item active" onclick="showPage('search',this)"><span class="nav-icon">⌕</span>検索</a>
-      <a class="nav-item" onclick="showPage('materials',this)"><span class="nav-icon">▶</span>教材</a>
+      <a class="nav-item" onclick="showPage('materials',this)"><span class="nav-icon">▶</span>教材・資料</a>
       <a class="nav-item" onclick="showPage('admin',this)"><span class="nav-icon">⚙</span>管理</a>
       <a class="nav-item" onclick="showPage('unanswered',this)"><span class="nav-icon">✉</span>未回答</a>
       <a class="nav-item" onclick="showPage('status',this)"><span class="nav-icon">◷</span>状況</a>
@@ -488,13 +561,25 @@ html{
 
     <div class="section-label">
       <div class="section-icon">▶</div>
-      <h2 class="panel-title">教材ライブラリ</h2>
+      <h2 class="panel-title">教材・資料ライブラリ</h2>
     </div>
 
     <div class="filter-chips" style="margin-bottom:12px;padding-top:0">
 
       <button class="chip active" onclick="filterMaterialCategory('all', this)">
         すべて
+      </button>
+
+      <button class="chip" onclick="filterMaterialCategory('フォーム', this)">
+        フォーム
+      </button>
+
+      <button class="chip" onclick="filterMaterialCategory('資料・スクリプト', this)">
+        資料・スクリプト
+      </button>
+
+      <button class="chip" onclick="filterMaterialCategory('コンテンツ', this)">
+        コンテンツ
       </button>
 
       <button class="chip" onclick="filterMaterialCategory('新電力', this)">
@@ -515,14 +600,6 @@ html{
 
       <button class="chip" onclick="filterMaterialCategory('後確認', this)">
         後確認
-      </button>
-
-      <button class="chip" onclick="filterMaterialCategory('資料・スクリプト', this)">
-        資料・スクリプト
-      </button>
-
-      <button class="chip" onclick="filterMaterialCategory('コンテンツ', this)">
-        コンテンツ
       </button>
 
     </div>
@@ -646,6 +723,35 @@ function normalizeText(text){let value=String(text||'').toLowerCase();value=valu
 function expandSearchTerms(input){const base=normalizeText(input);const terms=new Set([base]);synonymGroups.forEach(group=>{const normalizedGroup=group.map(normalizeText);const hit=normalizedGroup.some(word=>base.includes(word)||word.includes(base));if(hit)normalizedGroup.forEach(word=>terms.add(word));});return Array.from(terms).filter(Boolean);}
 function safeText(text){return String(text||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function safeArg(text){return String(text||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,' ');}
+
+function hasValidAppLogin(){
+  return localStorage.getItem('appUnlocked')==='true' &&
+         localStorage.getItem('appPasswordVersion')===PASSWORD_VERSION;
+}
+function applyAppAuthState(){
+  if(hasValidAppLogin()){
+    document.body.classList.remove('auth-locked');
+    document.body.classList.add('auth-unlocked');
+  }else{
+    document.body.classList.add('auth-locked');
+    document.body.classList.remove('auth-unlocked');
+  }
+}
+function loginApp(){
+  const input=document.getElementById('appPasswordInput');
+  const error=document.getElementById('loginError');
+  const pass=input ? input.value.trim() : '';
+
+  if(pass!==APP_PASSWORD){
+    if(error)error.style.display='block';
+    return;
+  }
+
+  localStorage.setItem('appUnlocked','true');
+  localStorage.setItem('appPasswordVersion',PASSWORD_VERSION);
+  applyAppAuthState();
+}
+
 function setHeroQuote(){document.getElementById('heroQuote').textContent=quotes[Math.floor(Math.random()*quotes.length)];}
 function isAdmin(){return localStorage.getItem('adminUnlocked')==='true';}
 function getQuestion(item){return item['質問']||'';} function getAnswer(item){return item['答え']||'';} function getCategory(item){return item['カテゴリ']||'未分類';} function getReferenceUrl(item){return item['参考URL']||'';} function getStatus(item){return item['状態']||'未対応';} function getDate(item){return item.created_at?new Date(item.created_at).toLocaleString('ja-JP'):'';}
@@ -693,13 +799,13 @@ function renderAdmin(){
       </div>
     </div>
     <div class="panel-card">
-      <div style="font-weight:900;font-size:18px;margin-bottom:14px">教材追加</div>
+      <div style="font-weight:900;font-size:18px;margin-bottom:14px">教材・資料追加</div>
       <div class="form-grid">
-        <input id="newMaterialTitle" placeholder="教材タイトル">
+        <input id="newMaterialTitle" placeholder="教材・資料タイトル">
         <input id="newMaterialUrl" placeholder="YouTube / PDF / 資料URL">
         <select id="newMaterialType"><option>動画</option><option>PDF</option><option>資料</option></select>
-        <select id="newMaterialCategory"><option>新電力</option><option>WS</option><option>VOD</option><option>営業</option><option>後確認</option><option>資料・スクリプト</option><option>コンテンツ</option><option>その他</option></select>
-        <button class="primary-btn" onclick="addMaterial()">教材を追加する</button>
+        <select id="newMaterialCategory"><option>フォーム</option><option>資料・スクリプト</option><option>コンテンツ</option><option>新電力</option><option>WS</option><option>VOD</option><option>営業</option><option>後確認</option><option>その他</option></select>
+        <button class="primary-btn" onclick="addMaterial()">教材・資料を追加する</button>
       </div>
     </div>
   `;
@@ -821,10 +927,10 @@ async function addKnowledge(){
 async function addMaterial(){
   if(!isAdmin()){alert('管理ログインしてください');return;}
   const title=document.getElementById('newMaterialTitle').value.trim();const url=document.getElementById('newMaterialUrl').value.trim();const type=document.getElementById('newMaterialType').value;const category=document.getElementById('newMaterialCategory').value;
-  if(!title||!url||!type||!category){alert('教材タイトル・URL・種別・カテゴリを入力してください');return;}
+  if(!title||!url||!type||!category){alert('教材・資料タイトル・URL・種別・カテゴリを入力してください');return;}
   const {error}=await supabaseClient.from('教材').insert([{ 'タイトル':title,'URL':url,'種別':type,'カテゴリ':category,'状態':'公開'}]);
-  if(error){console.error(error);alert('教材追加に失敗しました');return;}
-  alert('教材を追加しました');await loadData();
+  if(error){console.error(error);alert('教材・資料追加に失敗しました');return;}
+  alert('教材・資料を追加しました');await loadData();
 }
 async function deleteMaterial(id){
   if(!isAdmin()){
@@ -832,7 +938,7 @@ async function deleteMaterial(id){
     return;
   }
 
-  if(!confirm('教材を削除しますか？')){
+  if(!confirm('教材・資料を削除しますか？')){
     return;
   }
 
@@ -843,17 +949,17 @@ async function deleteMaterial(id){
 
   if(error){
     console.error(error);
-    alert('教材削除に失敗しました');
+    alert('教材・資料削除に失敗しました');
     return;
   }
 
-  alert('教材を削除しました');
+  alert('教材・資料を削除しました');
   await loadData();
 }
 function renderMaterials(){
   const list=document.getElementById('materialsList');
   const visible=materials.filter(item=>getStatus(item)==='公開').filter(item=>currentMaterialCategory==='all'?true:normalizeText(getCategory(item)).includes(normalizeText(currentMaterialCategory)));
-  if(visible.length===0){list.innerHTML=`<div class="mini-card"><b>教材はまだありません</b><small>管理画面からYouTubeやPDFのURLを追加できます。</small></div>`;return;}
+  if(visible.length===0){list.innerHTML=`<div class="mini-card"><b>教材・資料はまだありません</b><small>管理画面からYouTubeやPDFのURLを追加できます。</small></div>`;return;}
   list.innerHTML=visible.map(item=>`
     <div class="mini-card">
       <a class="material-card" href="${safeText(item['URL']||'')}" target="_blank">
@@ -904,6 +1010,7 @@ function showPage(pageId,element){
 }
 
 window.addEventListener('DOMContentLoaded',async()=>{
+  applyAppAuthState();
   setHeroQuote();
   renderProposalForm();
   renderAdmin();

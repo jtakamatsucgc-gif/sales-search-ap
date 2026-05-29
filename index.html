@@ -489,6 +489,10 @@ html{
         資料・スクリプト
       </button>
 
+      <button class="chip" onclick="filterMaterialCategory('コンテンツ', this)">
+        コンテンツ
+      </button>
+
     </div>
 
     <div id="materialsList" class="materials-list"></div>
@@ -662,7 +666,7 @@ function renderAdmin(){
         <input id="newMaterialTitle" placeholder="教材タイトル">
         <input id="newMaterialUrl" placeholder="YouTube / PDF / 資料URL">
         <select id="newMaterialType"><option>動画</option><option>PDF</option><option>資料</option></select>
-        <select id="newMaterialCategory"><option>新電力</option><option>WS</option><option>VOD</option><option>営業</option><option>後確認</option><option>資料・スクリプト</option><option>その他</option></select>
+        <select id="newMaterialCategory"><option>新電力</option><option>WS</option><option>VOD</option><option>営業</option><option>後確認</option><option>資料・スクリプト</option><option>コンテンツ</option><option>その他</option></select>
         <button class="primary-btn" onclick="addMaterial()">教材を追加する</button>
       </div>
     </div>

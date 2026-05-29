@@ -1053,8 +1053,25 @@ function renderMaterials(){
     <div class="mini-card" data-id="${item.id}">
       <a class="material-card" href="${safeText(item['URL']||'')}" target="_blank">
         <div class="material-type">${safeText(item['種別']||'教材')}</div>
-        <div class="material-title">${safeText(item['タイトル']||'無題')}</div>
-        <div class="material-category">${safeText(getCategory(item))}</div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+          <div style="flex:1;min-width:0">
+            <div class="material-title">${safeText(item['タイトル']||'無題')}</div>
+            <div class="material-category">${safeText(getCategory(item))}</div>
+          </div>
+
+          ${
+            (item['URL']||'').includes('youtu')
+            ? `
+              <img
+                src="https://img.youtube.com/vi/${((item['URL']||'').match(/(?:youtu\.be\/|v=)([^?&]+)/)||[])[1] || ''}/mqdefault.jpg"
+                style="width:80px;height:45px;object-fit:cover;border-radius:8px;flex-shrink:0;background:#e2e8f0"
+                alt="動画サムネイル"
+              >
+            `
+            : ''
+          }
+        </div>
       </a>
 
       ${isAdmin() ? `

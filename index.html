@@ -1052,9 +1052,17 @@ function renderMaterials(){
       </a>
 
       ${isAdmin() ? `
-        <div class="btn-row">
-          <button class="danger-btn" onclick="deleteMaterial('${item.id}')">
-            削除
+        <div style="display:flex;justify-content:flex-end;gap:6px;margin-top:8px">
+          <button
+            onclick="deleteMaterial('${item.id}')"
+            style="border:none;background:#fee2e2;color:#991b1b;border-radius:8px;padding:4px 8px;font-size:11px;font-weight:900;min-width:auto">
+            🗑
+          </button>
+
+          <button
+            onclick="moveMaterial('${item.id}','up')"
+            style="border:1px solid #dbe3ef;background:#eef4fb;color:#0f172a;border-radius:8px;padding:4px 8px;font-size:11px;font-weight:900;min-width:auto;cursor:grab">
+            ☰
           </button>
         </div>
       ` : ''}

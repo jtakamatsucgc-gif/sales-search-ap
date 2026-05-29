@@ -113,7 +113,7 @@ border:1px solid rgba(37,99,235,.18)
 
 .content{display:block;margin-top:18px}.section-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 14px}.section-head h2{font-size:24px;font-weight:1000;letter-spacing:-.04em}.section-head span{color:#475569;font-size:15px;margin-left:10px;font-weight:700}
 .result-card,.panel-card,.mini-card,.stat-box{background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:20px 22px;margin-bottom:12px;box-shadow:0 14px 42px rgba(15,23,42,.06)}
-.result-meta{color:#0b63ff;font-weight:900;font-size:13px;margin-bottom:8px}.result-card h3{font-size:21px;font-weight:1000;letter-spacing:-.035em;margin-bottom:6px}.result-card p{color:#334155;font-size:15px;white-space:pre-line}
+.result-meta{color:#0b63ff;font-weight:900;font-size:13px;margin-bottom:8px}.result-card h3{font-size:21px;font-weight:1000;letter-spacing:-.035em;margin-bottom:6px}.result-card p{color:#334155;font-size:17px;line-height:1.9;white-space:pre-line}
 .tags{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.tag{background:#dbeafe;color:#1d4ed8;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:900}
 .section-block{margin-top:22px}.section-label{display:flex;align-items:center;gap:10px;margin-bottom:12px}.section-icon{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#0b63ff,#1d4ed8);color:#fff;display:grid;place-items:center;font-size:18px;box-shadow:0 8px 18px rgba(37,99,235,.25)}.panel-title{font-size:22px;font-weight:1000;letter-spacing:-.035em;margin:0}
 .form-grid{display:grid;gap:12px}.form-grid input,.form-grid textarea,.form-grid select{width:100%;padding:14px 15px;border-radius:14px;border:1px solid #dbe3ef;background:#fff;color:#0f172a;font-size:15px;outline:none}.form-grid textarea{min-height:120px;resize:vertical}
@@ -343,8 +343,8 @@ html{
 }
 
 .result-card p{
-  font-size:14px;
-  line-height:1.8;
+  font-size:16px;
+  line-height:1.9;
 }
 
 .section-block{
@@ -650,7 +650,7 @@ function renderAdmin(){
       <div style="font-weight:900;font-size:18px;margin-bottom:14px">直接ナレッジ追加</div>
       <div class="form-grid">
         <input id="newKeyword" placeholder="質問・キーワード">
-        <select id="newCategory"><option>新電力</option><option>WS</option><option>VOD</option><option>営業</option><option>その他</option></select>
+        <select id="newCategory"><option>⚡ 新電力</option><option>💧 WS</option><option>🎬 VOD</option><option>📄 契約</option><option>🔢 明細</option><option>💰 料金</option><option>💲 解約金</option><option>🏃‍♂️‍➡️ 営業</option><option>🔥 クレーム</option><option>その他</option></select>
         <textarea id="newAnswer" placeholder="回答内容"></textarea>
         <input id="newReferenceUrl" placeholder="参考URL（任意）">
         <button class="primary-btn" onclick="addKnowledge()">直接追加する</button>
@@ -688,11 +688,62 @@ function filterCategory(category,element){currentCategory=category;document.quer
 function filterMaterialCategory(category,element){currentMaterialCategory=category;document.querySelectorAll('#materials .chip').forEach(chip=>chip.classList.remove('active'));if(element)element.classList.add('active');renderMaterials();}
 
 function searchKnowledge(scrollToResults=true){
-  const rawInput=document.getElementById('searchInput').value.trim();const input=normalizeText(rawInput);const searchTerms=expandSearchTerms(rawInput);const results=document.getElementById('results');
-  if(!input){results.innerHTML=`<div class="section-head"><h2>検索結果 <span>0件</span></h2></div><div class="result-card"><div class="result-meta">検索してください</div><h3>キーワードを入力すると、登録済みナレッジを検索できます。</h3><p>例：他社電力の明細 / 解約金 / WS / VOD / 新電力</p></div>`;return;}
-  const filtered=knowledge.filter(item=>{const question=normalizeText(getQuestion(item));const answer=normalizeText(getAnswer(item));const category=normalizeText(getCategory(item));const searchableText=question+answer+category;const keywordMatch=searchTerms.some(term=>searchableText.includes(term));const categoryMatch=currentCategory==='all'?true:category.includes(normalizeText(currentCategory));return keywordMatch&&categoryMatch;});
-  if(filtered.length===0){results.innerHTML=`<div class="section-head"><h2>検索結果 <span>0件</span></h2></div><div class="result-card"><div class="result-meta">該当なし</div><h3>この質問はまだ登録されていません。</h3><p>必要であれば、未回答として送信してください。</p><div class="btn-row"><button class="primary-btn" onclick="submitRequest('${safeArg(rawInput)}')">この質問を送信</button></div></div>`;if(scrollToResults)document.getElementById('results').scrollIntoView({behavior:'smooth'});return;}
+  const rawInput=document.getElementById('searchInput').value.trim();
+  const input=normalizeText(rawInput);
+  const results=document.getElementById('results');
+
+  if(!input){
+    results.innerHTML=`<div class="section-head"><h2>検索結果 <span>0件</span></h2></div><div class="result-card"><div class="result-meta">検索してください</div><h3>キーワードを入力すると、登録済みナレッジを検索できます。</h3><p>例：他社電力の明細 / 解約金 / WS / VOD / 新電力</p></div>`;
+    return;
+  }
+
+  const rawWords=rawInput
+    .split(/[ 　]+/)
+    .map(word=>word.trim())
+    .filter(Boolean);
+
+  const keywordGroups=rawWords.length
+    ? rawWords.map(word=>expandSearchTerms(word))
+    : [expandSearchTerms(rawInput)];
+
+  const scored=knowledge.map(item=>{
+    const question=normalizeText(getQuestion(item));
+    const answer=normalizeText(getAnswer(item));
+    const category=normalizeText(getCategory(item));
+    const searchableText=question+answer+category;
+
+    const keywordMatch=keywordGroups.every(group=>
+      group.some(term=>searchableText.includes(term))
+    );
+
+    const categoryMatch=currentCategory==='all'
+      ? true
+      : category.includes(normalizeText(currentCategory));
+
+    let score=0;
+    keywordGroups.forEach(group=>{
+      group.forEach(term=>{
+        if(question.includes(term)) score+=4;
+        if(category.includes(term)) score+=3;
+        if(answer.includes(term)) score+=1;
+      });
+    });
+
+    return {item,keywordMatch,categoryMatch,score};
+  })
+  .filter(row=>row.keywordMatch&&row.categoryMatch)
+  .sort((a,b)=>b.score-a.score);
+
+  const filtered=scored.map(row=>row.item);
+
+  if(filtered.length===0){
+    results.innerHTML=`<div class="section-head"><h2>検索結果 <span>0件</span></h2></div><div class="result-card"><div class="result-meta">該当なし</div><h3>この質問はまだ登録されていません。</h3><p>必要であれば、未回答として送信してください。</p><div class="btn-row"><button class="primary-btn" onclick="submitRequest('${safeArg(rawInput)}')">この質問を送信</button></div></div>`;
+    if(scrollToResults)document.getElementById('results').scrollIntoView({behavior:'smooth'});
+    return;
+  }
+
   results.innerHTML=`<div class="section-head"><h2>検索結果 <span>${filtered.length}件</span></h2></div>`+filtered.map(item=>`<article class="result-card"><div class="result-meta">${safeText(getCategory(item))}</div><h3>${safeText(getQuestion(item))}</h3><p>${safeText(getAnswer(item))}</p>${getReferenceUrl(item)?`<a class="ref-link" href="${safeText(getReferenceUrl(item))}" target="_blank">↗ 参考URLを開く</a>`:''}<div class="tags"><span class="tag">${safeText(getCategory(item))}</span></div></article>`).join('');
+
   if(scrollToResults)document.getElementById('results').scrollIntoView({behavior:'smooth'});
 }
 async function submitRequest(text){if(!text){alert('検索欄に質問を入力してください');return;}const {error}=await supabaseClient.from('未回答').insert([{ '質問':text,'状態':'未対応'}]);if(error){console.error(error);alert('未回答の保存に失敗しました。');return;}alert('未回答として保存しました');await loadData();}

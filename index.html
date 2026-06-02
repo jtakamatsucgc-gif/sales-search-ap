@@ -1442,7 +1442,6 @@ function renderSeitokiCalendar(selectedDateKey){
     const muted=date.getMonth()!==month?' muted':'';
     const today=key===todayKey?' today':'';
     const selectedClass=key===selected?' selected':'';
-    const selectedClass=key===selected?' selected':'';
     html+=`<div class="calendar-day${muted}${today}${selectedClass}" onclick="selectSeitokiDate('${key}')">
       <div class="day-number"><span>${date.getDate()}</span>${items.length?`<span class="day-count">${items.length}</span>`:''}</div>
       ${items.slice(0,4).map(item=>`

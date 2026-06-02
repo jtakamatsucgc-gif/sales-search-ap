@@ -732,6 +732,159 @@ html{
   }
 }
 
+
+/* ===== セイトキ予定カード・時間セレクト最終調整 ===== */
+.seitoki-time-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  width:100%;
+}
+
+.seitoki-time-grid select{
+  min-width:0;
+  width:100%;
+  padding:14px 15px;
+  border-radius:14px;
+  border:1px solid #dbe3ef;
+  background:#fff;
+  color:#0f172a;
+  font-size:15px;
+  outline:none;
+  font-family:inherit;
+}
+
+.practice-detail{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:14px;
+  align-items:center;
+  background:#fff;
+  border:1px solid #e2e8f0;
+  border-radius:20px;
+  padding:16px;
+  box-shadow:0 10px 28px rgba(15,23,42,.05);
+}
+
+.practice-detail > div:first-child{
+  display:grid;
+  grid-template-columns:110px 1fr;
+  gap:18px;
+  align-items:center;
+  min-width:0;
+}
+
+.practice-detail-time{
+  border-left:5px solid #0ea5e9;
+  padding-left:14px;
+  line-height:1.25;
+  color:#0f172a;
+}
+
+.practice-detail-time b{
+  display:block;
+  font-size:20px;
+  font-weight:1000;
+  color:#0f172a;
+}
+
+.practice-detail-time span{
+  display:block;
+  font-size:16px;
+  color:#94a3b8;
+  font-weight:1000;
+  margin-top:4px;
+}
+
+.practice-detail-main{
+  min-width:0;
+}
+
+.practice-detail-main b{
+  display:block;
+  font-size:20px;
+  font-weight:1000;
+  color:#0f172a;
+  line-height:1.35;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.practice-detail-main small{
+  display:block;
+  color:#475569;
+  font-weight:1000;
+  margin-top:4px;
+  font-size:16px;
+  line-height:1.35;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.practice-delete{
+  border:0;
+  background:#fee2e2;
+  color:#991b1b;
+  border-radius:16px;
+  padding:12px 16px;
+  font-size:14px;
+  font-weight:1000;
+  white-space:nowrap;
+}
+
+@media(max-width:980px){
+  .seitoki-time-grid{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+  .seitoki-time-grid select{
+    padding:15px 14px;
+    font-size:16px;
+    border-radius:14px;
+  }
+
+  .practice-detail{
+    grid-template-columns:1fr auto;
+    gap:10px;
+    border-radius:20px;
+    padding:16px;
+  }
+
+  .practice-detail > div:first-child{
+    grid-template-columns:92px 1fr;
+    gap:14px;
+  }
+
+  .practice-detail-time{
+    padding-left:12px;
+  }
+
+  .practice-detail-time b{
+    font-size:20px;
+  }
+
+  .practice-detail-time span{
+    font-size:15px;
+  }
+
+  .practice-detail-main b{
+    font-size:20px;
+  }
+
+  .practice-detail-main small{
+    font-size:16px;
+  }
+
+  .practice-delete{
+    padding:11px 14px;
+    border-radius:16px;
+    font-size:13px;
+  }
+}
+
 </style>
 </head>
 
@@ -1410,6 +1563,23 @@ function getSeitokiTimeText(item){
   if(start)return `${start}〜`;
   return '時間未定';
 }
+function buildTimeSelects(){
+  const start=document.getElementById('newSeitokiStart');
+  const end=document.getElementById('newSeitokiEnd');
+  if(!start||!end)return;
+
+  const times=[];
+  for(let h=0;h<24;h++){
+    for(let m=0;m<60;m+=15){
+      const hh=String(h).padStart(2,'0');
+      const mm=String(m).padStart(2,'0');
+      times.push(`${hh}:${mm}`);
+    }
+  }
+
+  start.innerHTML='<option value="">開始時間</option>'+times.map(time=>`<option value="${time}">${time}</option>`).join('');
+  end.innerHTML='<option value="">終了時間</option>'+times.map(time=>`<option value="${time}">${time}</option>`).join('');
+}
 function changeSeitokiMonth(diff){
   seitokiCurrentDate=new Date(seitokiCurrentDate.getFullYear(),seitokiCurrentDate.getMonth()+diff,1);
   renderSeitokiCalendar();
@@ -1469,8 +1639,8 @@ function renderSeitokiAddForm(dateKey,label){
         <input id="newSeitokiDate" type="hidden" value="${safeText(dateKey)}">
         <input id="newSeitokiName" placeholder="名前 例：髙松純三">
         <div class="seitoki-time-grid">
-          <input id="newSeitokiStart" type="time" step="900" placeholder="開始時間">
-          <input id="newSeitokiEnd" type="time" step="900" placeholder="終了時間">
+          <select id="newSeitokiStart"></select>
+          <select id="newSeitokiEnd"></select>
         </div>
         <input id="newSeitokiContent" placeholder="内容 例：ステセ練習 / ロープレ / 番確練習">
         <button class="primary-btn" onclick="addSeitokiSchedule()">予定を追加する</button>

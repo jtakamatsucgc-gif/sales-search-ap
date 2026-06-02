@@ -184,52 +184,36 @@ border:1px solid rgba(37,99,235,.18)
 .status-line,.notice{color:#64748b;font-size:13px;margin-top:8px}.unanswered-list,.proposal-list,.materials-list{display:grid;gap:12px}.mini-card b{display:block;font-size:16px;margin-bottom:4px}.mini-card small{color:#64748b}.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.ref-link{display:inline-flex;align-items:center;gap:8px;background:#eff6ff;color:#1d4ed8;padding:10px 14px;border-radius:12px;text-decoration:none;font-weight:900;font-size:14px;margin-top:12px}.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat-box small{color:#64748b;font-weight:800}.stat-box b{display:block;font-size:32px;line-height:1.1;margin-top:6px}.review-box{margin-top:12px;padding:14px;border-radius:14px;background:#f8fafc;border:1px solid #dbeafe}.review-label{font-size:12px;font-weight:900;color:#2563eb;margin-bottom:6px}.review-text{font-size:14px;color:#334155;white-space:pre-line;line-height:1.8}
 .material-card{display:block;text-decoration:none;color:#0f172a;max-width:100%;overflow:hidden}.material-card:hover{transform:translateY(-1px)}.material-type{display:inline-block;background:#0b63ff;color:#fff;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:900;margin-bottom:10px}.material-title{font-size:18px;font-weight:1000;margin-bottom:6px;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:break-word;line-height:1.45}.material-category{font-size:13px;color:#64748b;font-weight:800}.materials-list .mini-card{max-width:100%;overflow:hidden}#materials{max-width:100%;overflow:hidden}#materials .filter-chips{max-width:100%;overflow-x:auto;overflow-y:hidden;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;touch-action:pan-x;padding-bottom:4px}#materials .filter-chips .chip{flex:0 0 auto}.order-list{display:grid;gap:10px}.order-item{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border:1px solid #e2e8f0;border-radius:16px;padding:14px;background:#fff}.order-title{font-weight:1000;font-size:15px;line-height:1.5}.order-meta{font-size:12px;color:#64748b;font-weight:800}.order-buttons{display:flex;gap:6px}.order-btn{border:1px solid #dbe3ef;background:#eef4fb;color:#0f172a;border-radius:12px;padding:10px 12px;font-size:14px;font-weight:1000}.drag-handle{touch-action:none}.sortable-ghost{opacity:.45}.sortable-chosen{box-shadow:0 18px 50px rgba(15,23,42,.16)}
 
-
 .calendar-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
 .calendar-title{font-size:20px;font-weight:1000;letter-spacing:-.035em}
 .calendar-nav{display:flex;gap:8px;align-items:center}
 .calendar-nav button{border:1px solid #dbe3ef;background:#fff;color:#0f172a;border-radius:12px;padding:10px 12px;font-size:14px;font-weight:1000}
-.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:#e2e8f0;border:1px solid #e2e8f0;border-radius:18px;overflow:hidden}
-.calendar-weekday{font-size:12px;font-weight:1000;color:#64748b;text-align:center;padding:9px 0;background:#f8fafc}
-.calendar-day{min-height:124px;background:#fff;border:0;padding:8px;overflow:hidden;cursor:pointer;transition:.15s}
-.calendar-day:hover{background:#f8fafc}
-.calendar-day.muted{background:#f8fafc;color:#94a3b8}
-.calendar-day.today{background:#eff6ff}
-.calendar-day.selected{box-shadow:inset 0 0 0 2px #0b63ff;background:#f0f7ff}
-.day-number{font-size:13px;font-weight:1000;color:#0f172a;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center}
-.day-count{font-size:10px;font-weight:1000;background:#0b63ff;color:#fff;border-radius:999px;padding:2px 7px}
-.practice-item{display:block;border:0;background:#dbeafe;color:#075985;border-radius:4px;padding:3px 5px;margin-top:4px;text-align:left;width:100%;font-size:11px;line-height:1.25;font-weight:1000;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.practice-item:nth-of-type(3n){background:#f3e8ff;color:#6b21a8}
-.practice-item:nth-of-type(3n+1){background:#dbeafe;color:#075985}
-.practice-item:nth-of-type(3n+2){background:#fee2e2;color:#be123c}
-.practice-time{display:none}
-.practice-name{display:inline;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.practice-place{display:inline;color:inherit;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.practice-place::before{content:' / '}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.calendar-weekday{font-size:12px;font-weight:1000;color:#64748b;text-align:center;padding:8px 0}
+.calendar-day{min-height:118px;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:10px;box-shadow:0 8px 24px rgba(15,23,42,.04);overflow:hidden}
+.calendar-day.muted{opacity:.42;background:#f8fafc}
+.calendar-day.today{border-color:#0b63ff;box-shadow:0 0 0 2px rgba(11,99,255,.12)}
+.calendar-day.selected{border-color:#f59e0b;box-shadow:0 0 0 2px rgba(245,158,11,.18)}
+.day-number{font-size:13px;font-weight:1000;color:#0f172a;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.day-count{font-size:10px;font-weight:1000;background:#dbeafe;color:#1d4ed8;border-radius:999px;padding:2px 7px}
+.practice-item{display:block;border:0;background:#eff6ff;color:#1e3a8a;border-radius:10px;padding:7px 8px;margin-top:6px;text-align:left;width:100%;font-size:12px;line-height:1.35;font-weight:900;overflow:hidden}
+.practice-time{display:block;color:#2563eb;font-size:11px;font-weight:1000}
+.practice-name{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.practice-place{display:block;color:#475569;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .seitoki-list{display:grid;gap:10px;margin-top:14px}
-.seitoki-list-title{font-size:22px;font-weight:1000;margin:22px 0 12px;letter-spacing:-.04em}
-.practice-detail{display:grid;grid-template-columns:92px 1fr auto;gap:14px;align-items:center;background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:16px;box-shadow:0 10px 28px rgba(15,23,42,.05)}
-.practice-detail-time{font-size:18px;font-weight:1000;line-height:1.25;color:#0f172a;border-left:4px solid #0ea5e9;padding-left:10px}
-.practice-detail-time span{display:block;font-size:13px;color:#94a3b8;font-weight:900;margin-top:2px}
-.practice-detail-main b{display:block;font-size:18px;line-height:1.35}
-.practice-detail-main small{display:block;color:#475569;font-weight:900;margin-top:4px;font-size:14px}
-.practice-delete{border:0;background:#fee2e2;color:#991b1b;border-radius:12px;padding:10px 12px;font-size:13px;font-weight:1000}
-.seitoki-add-card{box-shadow:none;margin:16px 0 16px;background:#f8fafc;border-style:dashed}
+.seitoki-list-title{font-size:16px;font-weight:1000;margin:18px 0 10px}
+.practice-detail{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:14px}
+.practice-detail b{font-size:15px}.practice-detail small{display:block;color:#64748b;font-weight:800;margin-top:4px}.practice-detail p{color:#334155;font-size:13px;margin-top:6px;white-space:pre-line}
 @media(max-width:980px){
   .calendar-toolbar{align-items:flex-start;flex-direction:column}
-  .calendar-grid{border-radius:14px}
-  .calendar-weekday{font-size:10px;padding:6px 0}
-  .calendar-day{min-height:90px;padding:5px}
+  .calendar-grid{gap:5px}
+  .calendar-weekday{font-size:10px;padding:5px 0}
+  .calendar-day{min-height:82px;border-radius:12px;padding:6px}
   .day-number{font-size:11px;margin-bottom:4px}
   .day-count{font-size:9px;padding:1px 5px}
-  .practice-item{padding:3px 4px;font-size:10px;border-radius:4px;margin-top:3px}
-  .practice-place{font-size:10px}
-  .practice-detail{grid-template-columns:72px 1fr auto;gap:8px;padding:12px;border-radius:16px}
-  .practice-detail-time{font-size:15px;padding-left:8px}
-  .practice-detail-time span{font-size:12px}
-  .practice-detail-main b{font-size:16px}
-  .practice-detail-main small{font-size:13px}
-  .practice-delete{padding:8px 10px;font-size:12px}
+  .practice-item{padding:5px 6px;font-size:10px;border-radius:8px;margin-top:4px}
+  .practice-time,.practice-place{font-size:9px}
+  .practice-detail{grid-template-columns:1fr}
 }
 
 @media(max-width:980px){
@@ -1238,7 +1222,7 @@ function renderSeitokiCalendar(selectedDateKey){
   const first=new Date(year,month,1);
   const start=new Date(year,month,1-first.getDay());
   const todayKey=formatDateKey(new Date());
-  const selected=selectedDateKey||todayKey;
+  const selected=selectedDateKey||null;
   const weekdays=['日','月','火','水','木','金','土'];
   let html='<div class="calendar-grid">'+weekdays.map(day=>`<div class="calendar-weekday">${day}</div>`).join('');
 
@@ -1249,32 +1233,34 @@ function renderSeitokiCalendar(selectedDateKey){
     const muted=date.getMonth()!==month?' muted':'';
     const today=key===todayKey?' today':'';
     const selectedClass=key===selected?' selected':'';
-    html+=`<div class="calendar-day${muted}${today}${selectedClass}" onclick="selectSeitokiDate('${key}')">
+    html+=`<div class="calendar-day${muted}${today}${selectedClass}" onclick="renderSeitokiDayList('${key}')">
       <div class="day-number"><span>${date.getDate()}</span>${items.length?`<span class="day-count">${items.length}</span>`:''}</div>
-      ${items.slice(0,4).map(item=>`
-        <button class="practice-item" onclick="event.stopPropagation();selectSeitokiDate('${key}')">
+      ${items.slice(0,3).map(item=>`
+        <button class="practice-item" onclick="event.stopPropagation();renderSeitokiDayList('${key}')">
+          <span class="practice-time">${safeText(getSeitokiTimeText(item))}</span>
           <span class="practice-name">${safeText(getSeitokiName(item))}</span>
           <span class="practice-place">${safeText(getSeitokiContent(item)||'内容未定')}</span>
         </button>
       `).join('')}
-      ${items.length>4?`<div class="status-line" style="font-size:10px;margin-top:4px">他${items.length-4}件</div>`:''}
+      ${items.length>3?`<div class="status-line" style="font-size:10px;margin-top:4px">他${items.length-3}件</div>`:''}
     </div>`;
   }
   html+='</div>';
   calendar.innerHTML=html;
-  renderSeitokiDayList(selected);
-}
-function selectSeitokiDate(dateKey){
-  seitokiCurrentDate=new Date(dateKey+'T00:00:00');
-  renderSeitokiCalendar(dateKey);
+  if(selected){
+    renderSeitokiDayList(selected);
+  }else{
+    dayList.innerHTML=`<div class="mini-card"><b>日付を選択してください</b><small>カレンダーの日付を押すと、その日の予定と追加フォームが表示されます。</small></div>`;
+  }
 }
 function renderSeitokiAddForm(dateKey,label){
   return `
-    <div class="panel-card seitoki-add-card">
+    <div class="panel-card" style="box-shadow:none;margin:14px 0 16px;background:#f8fafc">
       <div style="font-weight:1000;font-size:18px;margin-bottom:6px">${safeText(label)}に予定を追加</div>
+      <div class="status-line" style="margin-bottom:12px">日付を選ぶと、その日のセイトキ予定を追加できます。</div>
       <div class="form-grid">
         <input id="newSeitokiDate" type="hidden" value="${safeText(dateKey)}">
-        <input id="newSeitokiName" placeholder="名前 例：TJ">
+        <input id="newSeitokiName" placeholder="名前 例：山田太郎">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <input id="newSeitokiStart" type="time" placeholder="開始時間">
           <input id="newSeitokiEnd" type="time" placeholder="終了時間">
@@ -1292,26 +1278,22 @@ function renderSeitokiDayList(dateKey){
   const items=seitokiSchedules
     .filter(item=>getSeitokiDate(item)===dateKey)
     .sort((a,b)=>String(getSeitokiStart(a)).localeCompare(String(getSeitokiStart(b))));
-  const label=new Date(dateKey+'T00:00:00').toLocaleDateString('ja-JP',{month:'long',day:'numeric',weekday:'long'});
+  const label=new Date(dateKey+'T00:00:00').toLocaleDateString('ja-JP',{month:'long',day:'numeric',weekday:'short'});
 
   const addForm=renderSeitokiAddForm(dateKey,label);
 
   if(items.length===0){
-    dayList.innerHTML=`<div class="seitoki-list-title">${safeText(label)}</div><div class="mini-card"><b>予定はありません</b><small>下のフォームからこの日の予定を追加できます。</small></div>${addForm}`;
+    dayList.innerHTML=`<div class="seitoki-list-title">${safeText(label)}の予定</div><div class="mini-card"><b>予定はありません</b><small>下のフォームからこの日の予定を追加できます。</small></div>${addForm}`;
     return;
   }
 
-  dayList.innerHTML=`<div class="seitoki-list-title">${safeText(label)}</div>`+items.map(item=>`
+  dayList.innerHTML=`<div class="seitoki-list-title">${safeText(label)}の予定</div>`+items.map(item=>`
     <div class="practice-detail">
-      <div class="practice-detail-time">
-        ${safeText(String(getSeitokiStart(item)||'').slice(0,5)||'--:--')}
-        <span>${safeText(String(getSeitokiEnd(item)||'').slice(0,5)||'終了未定')}</span>
-      </div>
-      <div class="practice-detail-main">
+      <div>
         <b>${safeText(getSeitokiName(item))}</b>
-        <small>${safeText(getSeitokiContent(item)||'内容未定')}</small>
+        <small>${safeText(getSeitokiTimeText(item))} / ${safeText(getSeitokiContent(item)||'内容未定')}</small>
       </div>
-      <button class="practice-delete" onclick="deleteSeitokiSchedule('${item.id}','${dateKey}')">削除</button>
+      ${isAdmin()?`<button class="danger-btn" onclick="deleteSeitokiSchedule('${item.id}')">削除</button>`:''}
     </div>
   `).join('')+addForm;
 }
@@ -1323,7 +1305,7 @@ async function addSeitokiSchedule(){
   const content=document.getElementById('newSeitokiContent').value.trim();
   if(!date||!name||!start||!content){alert('日付・名前・開始時間・内容を入力してください');return;}
   const {error}=await supabaseClient.from('セイトキ').insert([{ '日付':date,'名前':name,'開始時間':start,'終了時間':end,'内容':content }]);
-  if(error){console.error(error);alert('セイトキ予定の追加に失敗しました。Supabaseの「セイトキ」テーブルに「内容」カラムがあるか確認してください。');return;}
+  if(error){console.error(error);alert('セイトキ予定の追加に失敗しました。Supabaseに「セイトキ」テーブルがあるか確認してください。');return;}
   alert('セイトキ予定を追加しました');
   document.getElementById('newSeitokiName').value='';
   document.getElementById('newSeitokiStart').value='';
@@ -1332,14 +1314,15 @@ async function addSeitokiSchedule(){
   seitokiCurrentDate=new Date(date+'T00:00:00');
   await loadData();
   showPage('seitoki',document.querySelector(".nav-item[onclick*='seitoki']"));
-  renderSeitokiCalendar(date);
+  renderSeitokiDayList(date);
 }
-async function deleteSeitokiSchedule(id,dateKey){
+async function deleteSeitokiSchedule(id){
+  if(!isAdmin()){alert('管理ログインしてください');return;}
   if(!confirm('このセイトキ予定を削除しますか？'))return;
   const {error}=await supabaseClient.from('セイトキ').delete().eq('id',id);
   if(error){console.error(error);alert('セイトキ予定の削除に失敗しました');return;}
+  alert('削除しました');
   await loadData();
-  renderSeitokiCalendar(dateKey);
 }
 
 function showPage(pageId,element){

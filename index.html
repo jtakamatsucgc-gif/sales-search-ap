@@ -184,6 +184,38 @@ border:1px solid rgba(37,99,235,.18)
 .status-line,.notice{color:#64748b;font-size:13px;margin-top:8px}.unanswered-list,.proposal-list,.materials-list{display:grid;gap:12px}.mini-card b{display:block;font-size:16px;margin-bottom:4px}.mini-card small{color:#64748b}.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.ref-link{display:inline-flex;align-items:center;gap:8px;background:#eff6ff;color:#1d4ed8;padding:10px 14px;border-radius:12px;text-decoration:none;font-weight:900;font-size:14px;margin-top:12px}.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat-box small{color:#64748b;font-weight:800}.stat-box b{display:block;font-size:32px;line-height:1.1;margin-top:6px}.review-box{margin-top:12px;padding:14px;border-radius:14px;background:#f8fafc;border:1px solid #dbeafe}.review-label{font-size:12px;font-weight:900;color:#2563eb;margin-bottom:6px}.review-text{font-size:14px;color:#334155;white-space:pre-line;line-height:1.8}
 .material-card{display:block;text-decoration:none;color:#0f172a;max-width:100%;overflow:hidden}.material-card:hover{transform:translateY(-1px)}.material-type{display:inline-block;background:#0b63ff;color:#fff;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:900;margin-bottom:10px}.material-title{font-size:18px;font-weight:1000;margin-bottom:6px;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:break-word;line-height:1.45}.material-category{font-size:13px;color:#64748b;font-weight:800}.materials-list .mini-card{max-width:100%;overflow:hidden}#materials{max-width:100%;overflow:hidden}#materials .filter-chips{max-width:100%;overflow-x:auto;overflow-y:hidden;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;touch-action:pan-x;padding-bottom:4px}#materials .filter-chips .chip{flex:0 0 auto}.order-list{display:grid;gap:10px}.order-item{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border:1px solid #e2e8f0;border-radius:16px;padding:14px;background:#fff}.order-title{font-weight:1000;font-size:15px;line-height:1.5}.order-meta{font-size:12px;color:#64748b;font-weight:800}.order-buttons{display:flex;gap:6px}.order-btn{border:1px solid #dbe3ef;background:#eef4fb;color:#0f172a;border-radius:12px;padding:10px 12px;font-size:14px;font-weight:1000}.drag-handle{touch-action:none}.sortable-ghost{opacity:.45}.sortable-chosen{box-shadow:0 18px 50px rgba(15,23,42,.16)}
 
+.calendar-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.calendar-title{font-size:20px;font-weight:1000;letter-spacing:-.035em}
+.calendar-nav{display:flex;gap:8px;align-items:center}
+.calendar-nav button{border:1px solid #dbe3ef;background:#fff;color:#0f172a;border-radius:12px;padding:10px 12px;font-size:14px;font-weight:1000}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.calendar-weekday{font-size:12px;font-weight:1000;color:#64748b;text-align:center;padding:8px 0}
+.calendar-day{min-height:118px;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:10px;box-shadow:0 8px 24px rgba(15,23,42,.04);overflow:hidden}
+.calendar-day.muted{opacity:.42;background:#f8fafc}
+.calendar-day.today{border-color:#0b63ff;box-shadow:0 0 0 2px rgba(11,99,255,.12)}
+.calendar-day.selected{border-color:#f59e0b;box-shadow:0 0 0 2px rgba(245,158,11,.18)}
+.day-number{font-size:13px;font-weight:1000;color:#0f172a;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.day-count{font-size:10px;font-weight:1000;background:#dbeafe;color:#1d4ed8;border-radius:999px;padding:2px 7px}
+.practice-item{display:block;border:0;background:#eff6ff;color:#1e3a8a;border-radius:10px;padding:7px 8px;margin-top:6px;text-align:left;width:100%;font-size:12px;line-height:1.35;font-weight:900;overflow:hidden}
+.practice-time{display:block;color:#2563eb;font-size:11px;font-weight:1000}
+.practice-name{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.practice-place{display:block;color:#475569;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seitoki-list{display:grid;gap:10px;margin-top:14px}
+.seitoki-list-title{font-size:16px;font-weight:1000;margin:18px 0 10px}
+.practice-detail{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:14px}
+.practice-detail b{font-size:15px}.practice-detail small{display:block;color:#64748b;font-weight:800;margin-top:4px}.practice-detail p{color:#334155;font-size:13px;margin-top:6px;white-space:pre-line}
+@media(max-width:980px){
+  .calendar-toolbar{align-items:flex-start;flex-direction:column}
+  .calendar-grid{gap:5px}
+  .calendar-weekday{font-size:10px;padding:5px 0}
+  .calendar-day{min-height:82px;border-radius:12px;padding:6px}
+  .day-number{font-size:11px;margin-bottom:4px}
+  .day-count{font-size:9px;padding:1px 5px}
+  .practice-item{padding:5px 6px;font-size:10px;border-radius:8px;margin-top:4px}
+  .practice-time,.practice-place{font-size:9px}
+  .practice-detail{grid-template-columns:1fr}
+}
+
 @media(max-width:980px){
 
 body{
@@ -206,17 +238,18 @@ html{
   right:0;
   bottom:0;
   top:auto;
+  width:100%;
   height:88px;
   z-index:9999;
 
   flex-direction:row;
   align-items:center;
-  justify-content:space-around;
+  justify-content:center;
 
   padding:
-    10px
-    10px
-    calc(10px + env(safe-area-inset-bottom));
+    8px
+    0
+    calc(8px + env(safe-area-inset-bottom));
 
   gap:0;
 
@@ -239,24 +272,30 @@ html{
   width:100%;
   display:grid;
   grid-template-columns:repeat(5,1fr);
-  gap:2px;
+  gap:0;
   align-items:center;
 }
 
 .nav-item{
+  display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
 
+  width:100%;
+  height:64px;
+
   gap:4px;
 
-  padding:6px 2px;
+  padding:0;
 
   border-radius:12px;
 
+  text-align:center;
   font-size:10px;
   font-weight:900;
 
+  min-width:0;
   min-height:58px;
 
   color:#bfdbfe;
@@ -269,9 +308,12 @@ html{
 }
 
 .nav-icon{
+  display:block;
   font-size:18px;
+  margin-bottom:4px;
   width:auto;
   line-height:1;
+  text-align:center;
 }
 
 .main{
@@ -501,10 +543,10 @@ html{
     <div><div class="brand-mark"></div><div class="brand-name">CGC<br>FIELD<br>ANSWER</div></div>
     <nav class="nav">
       <a class="nav-item active" onclick="showPage('search',this)"><span class="nav-icon">⌕</span>検索</a>
-      <a class="nav-item" onclick="showPage('materials',this)"><span class="nav-icon">▶</span>教材・資料</a>
-      <a class="nav-item" onclick="showPage('admin',this)"><span class="nav-icon">⚙</span>管理</a>
+      <a class="nav-item" onclick="showPage('materials',this)"><span class="nav-icon">▶</span>教材</a>
+      <a class="nav-item" onclick="showPage('seitoki',this)"><span class="nav-icon">📅</span>セイトキ</a>
       <a class="nav-item" onclick="showPage('unanswered',this)"><span class="nav-icon">✉</span>未回答</a>
-      <a class="nav-item" onclick="showPage('status',this)"><span class="nav-icon">◷</span>状況</a>
+      <a class="nav-item" onclick="showPage('admin',this)"><span class="nav-icon">⚙</span>管理</a>
     </nav>
     <div class="help-card"><b>FIELD ANSWER</b><p>現場の質問を、チームの資産へ。</p></div>
   </aside>
@@ -608,6 +650,30 @@ html{
     <div id="materialsList" class="materials-list"></div>
   </div>
 
+
+  <div class="section-block page-section" id="seitoki" style="display:none">
+    <div class="section-label">
+      <div class="section-icon">📅</div>
+      <h2 class="panel-title">セイトキ</h2>
+    </div>
+
+    <div class="panel-card">
+      <div class="calendar-toolbar">
+        <div>
+          <div class="calendar-title" id="seitokiMonthTitle">----</div>
+          <div class="status-line">その日に誰が何時にセイトキにいるかを確認</div>
+        </div>
+        <div class="calendar-nav">
+          <button onclick="changeSeitokiMonth(-1)">← 前月</button>
+          <button onclick="goSeitokiToday()">今月</button>
+          <button onclick="changeSeitokiMonth(1)">次月 →</button>
+        </div>
+      </div>
+      <div id="seitokiCalendar"></div>
+      <div id="seitokiDayList" class="seitoki-list"></div>
+    </div>
+  </div>
+
   <div class="section-block page-section" id="admin" style="display:none">
     <div class="section-label">
       <div class="section-icon">⚙</div>
@@ -623,35 +689,22 @@ html{
       <h2 class="panel-title">未回答</h2>
     </div>
 
-    <div id="requestList" class="unanswered-list"></div>
-  </div>
-
-  <div class="section-block page-section" id="status" style="display:none">
-
-    <div class="section-label">
-      <div class="section-icon">◷</div>
-      <h2 class="panel-title">状況</h2>
-    </div>
-
-    <div class="stats-grid">
-
+    <div class="stats-grid" style="margin-bottom:16px">
       <div class="stat-box">
         <small>登録ナレッジ</small>
         <b id="knowledgeCount">0</b>
       </div>
-
       <div class="stat-box">
         <small>未回答質問</small>
         <b id="requestCount">0</b>
       </div>
-
       <div class="stat-box">
         <small>審査中の回答案</small>
         <b id="proposalCount">0</b>
       </div>
-
     </div>
 
+    <div id="requestList" class="unanswered-list"></div>
   </div>
 
 </section>
@@ -663,6 +716,8 @@ let knowledge = [];
 let requests = [];
 let proposals = [];
 let materials = [];
+let seitokiSchedules = [];
+let seitokiCurrentDate = new Date();
 let currentCategory = 'all';
 let currentMaterialCategory = 'all';
 
@@ -851,6 +906,7 @@ function renderAdmin(){
         <button class="primary-btn" onclick="addMaterial()">教材・資料を追加する</button>
       </div>
     </div>
+
     <div class="panel-card">
       <div style="font-weight:900;font-size:18px;margin-bottom:14px">教材・資料の表示順</div>
       <div class="status-line" style="margin-bottom:12px">上へ / 下へ を押すと、教材・資料ライブラリの並び順に反映されます。</div>
@@ -866,12 +922,14 @@ async function loadData(){
   const unansweredResult=await supabaseClient.from('未回答').select('*').order('created_at',{ascending:false});
   const proposalsResult=await supabaseClient.from('回答案').select('*').order('created_at',{ascending:false});
   const materialsResult=await supabaseClient.from('教材').select('*').order('表示順',{ascending:true,nullsFirst:false}).order('created_at',{ascending:false});
+  const seitokiResult=await supabaseClient.from('セイトキ').select('*').order('日付',{ascending:true}).order('開始時間',{ascending:true});
   if(answersResult.error){console.error(answersResult.error);alert('回答データの読み込みに失敗しました。');return;}
   if(unansweredResult.error){console.error(unansweredResult.error);alert('未回答データの読み込みに失敗しました。');return;}
   if(proposalsResult.error){console.error(proposalsResult.error);alert('回答案データの読み込みに失敗しました。');return;}
   if(materialsResult.error){console.error(materialsResult.error);alert('教材データの読み込みに失敗しました。');return;}
+  if(seitokiResult.error){console.warn('セイトキデータの読み込みに失敗しました。テーブル未作成の可能性があります。', seitokiResult.error);seitokiSchedules=[];}else{seitokiSchedules=seitokiResult.data||[];}
   knowledge=answersResult.data||[];requests=unansweredResult.data||[];proposals=proposalsResult.data||[];materials=materialsResult.data||[];
-  updateStats();renderRequests();renderProposalForm();renderAdmin();renderMaterials();searchKnowledge(false);
+  updateStats();renderRequests();renderProposalForm();renderAdmin();renderMaterials();renderSeitokiCalendar();searchKnowledge(false);
 }
 function updateStats(){const pending=proposals.filter(item=>getStatus(item)==='審査中').length;document.getElementById('knowledgeCount').innerText=knowledge.length;document.getElementById('requestCount').innerText=requests.length;document.getElementById('proposalCount').innerText=pending;document.getElementById('proposalBadge').innerText=pending;}
 function filterCategory(category,element){currentCategory=category;document.querySelectorAll('#search .chip').forEach(chip=>chip.classList.remove('active'));if(element)element.classList.add('active');searchKnowledge(false);}
@@ -1124,6 +1182,149 @@ function renderMaterials(){
     });
   }
 }
+
+function formatDateKey(date){
+  const y=date.getFullYear();
+  const m=String(date.getMonth()+1).padStart(2,'0');
+  const d=String(date.getDate()).padStart(2,'0');
+  return `${y}-${m}-${d}`;
+}
+function getSeitokiDate(item){return item['日付']||'';}
+function getSeitokiName(item){return item['名前']||'';}
+function getSeitokiStart(item){return item['開始時間']||'';}
+function getSeitokiEnd(item){return item['終了時間']||'';}
+function getSeitokiContent(item){return item['内容']||item['練習場所']||'';}
+function getSeitokiTimeText(item){
+  const start=String(getSeitokiStart(item)||'').slice(0,5);
+  const end=String(getSeitokiEnd(item)||'').slice(0,5);
+  if(start&&end)return `${start}-${end}`;
+  if(start)return `${start}〜`;
+  return '時間未定';
+}
+function changeSeitokiMonth(diff){
+  seitokiCurrentDate=new Date(seitokiCurrentDate.getFullYear(),seitokiCurrentDate.getMonth()+diff,1);
+  renderSeitokiCalendar();
+}
+function goSeitokiToday(){
+  seitokiCurrentDate=new Date();
+  renderSeitokiCalendar(formatDateKey(new Date()));
+}
+function renderSeitokiCalendar(selectedDateKey){
+  const calendar=document.getElementById('seitokiCalendar');
+  const title=document.getElementById('seitokiMonthTitle');
+  const dayList=document.getElementById('seitokiDayList');
+  if(!calendar||!title||!dayList)return;
+
+  const year=seitokiCurrentDate.getFullYear();
+  const month=seitokiCurrentDate.getMonth();
+  title.textContent=`${year}年${month+1}月`;
+
+  const first=new Date(year,month,1);
+  const start=new Date(year,month,1-first.getDay());
+  const todayKey=formatDateKey(new Date());
+  const selected=selectedDateKey||null;
+  const weekdays=['日','月','火','水','木','金','土'];
+  let html='<div class="calendar-grid">'+weekdays.map(day=>`<div class="calendar-weekday">${day}</div>`).join('');
+
+  for(let i=0;i<42;i++){
+    const date=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i);
+    const key=formatDateKey(date);
+    const items=seitokiSchedules.filter(item=>getSeitokiDate(item)===key);
+    const muted=date.getMonth()!==month?' muted':'';
+    const today=key===todayKey?' today':'';
+    const selectedClass=key===selected?' selected':'';
+    html+=`<div class="calendar-day${muted}${today}${selectedClass}" onclick="renderSeitokiDayList('${key}')">
+      <div class="day-number"><span>${date.getDate()}</span>${items.length?`<span class="day-count">${items.length}</span>`:''}</div>
+      ${items.slice(0,3).map(item=>`
+        <button class="practice-item" onclick="event.stopPropagation();renderSeitokiDayList('${key}')">
+          <span class="practice-time">${safeText(getSeitokiTimeText(item))}</span>
+          <span class="practice-name">${safeText(getSeitokiName(item))}</span>
+          <span class="practice-place">${safeText(getSeitokiContent(item)||'内容未定')}</span>
+        </button>
+      `).join('')}
+      ${items.length>3?`<div class="status-line" style="font-size:10px;margin-top:4px">他${items.length-3}件</div>`:''}
+    </div>`;
+  }
+  html+='</div>';
+  calendar.innerHTML=html;
+  if(selected){
+    renderSeitokiDayList(selected);
+  }else{
+    dayList.innerHTML=`<div class="mini-card"><b>日付を選択してください</b><small>カレンダーの日付を押すと、その日の予定と追加フォームが表示されます。</small></div>`;
+  }
+}
+function renderSeitokiAddForm(dateKey,label){
+  return `
+    <div class="panel-card" style="box-shadow:none;margin:14px 0 16px;background:#f8fafc">
+      <div style="font-weight:1000;font-size:18px;margin-bottom:6px">${safeText(label)}に予定を追加</div>
+      <div class="status-line" style="margin-bottom:12px">日付を選ぶと、その日のセイトキ予定を追加できます。</div>
+      <div class="form-grid">
+        <input id="newSeitokiDate" type="hidden" value="${safeText(dateKey)}">
+        <input id="newSeitokiName" placeholder="名前 例：山田太郎">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <input id="newSeitokiStart" type="time" placeholder="開始時間">
+          <input id="newSeitokiEnd" type="time" placeholder="終了時間">
+        </div>
+        <input id="newSeitokiContent" placeholder="内容 例：ステセ練習 / ロープレ / 番確練習">
+        <button class="primary-btn" onclick="addSeitokiSchedule()">予定を追加する</button>
+        <div class="status-line">追加した予定は全員のカレンダーに反映されます。</div>
+      </div>
+    </div>
+  `;
+}
+function renderSeitokiDayList(dateKey){
+  const dayList=document.getElementById('seitokiDayList');
+  if(!dayList)return;
+  const items=seitokiSchedules
+    .filter(item=>getSeitokiDate(item)===dateKey)
+    .sort((a,b)=>String(getSeitokiStart(a)).localeCompare(String(getSeitokiStart(b))));
+  const label=new Date(dateKey+'T00:00:00').toLocaleDateString('ja-JP',{month:'long',day:'numeric',weekday:'short'});
+
+  const addForm=renderSeitokiAddForm(dateKey,label);
+
+  if(items.length===0){
+    dayList.innerHTML=`<div class="seitoki-list-title">${safeText(label)}の予定</div><div class="mini-card"><b>予定はありません</b><small>下のフォームからこの日の予定を追加できます。</small></div>${addForm}`;
+    return;
+  }
+
+  dayList.innerHTML=`<div class="seitoki-list-title">${safeText(label)}の予定</div>`+items.map(item=>`
+    <div class="practice-detail">
+      <div>
+        <b>${safeText(getSeitokiName(item))}</b>
+        <small>${safeText(getSeitokiTimeText(item))} / ${safeText(getSeitokiContent(item)||'内容未定')}</small>
+      </div>
+      ${isAdmin()?`<button class="danger-btn" onclick="deleteSeitokiSchedule('${item.id}')">削除</button>`:''}
+    </div>
+  `).join('')+addForm;
+}
+async function addSeitokiSchedule(){
+  const date=document.getElementById('newSeitokiDate').value;
+  const name=document.getElementById('newSeitokiName').value.trim();
+  const start=document.getElementById('newSeitokiStart').value;
+  const end=document.getElementById('newSeitokiEnd').value;
+  const content=document.getElementById('newSeitokiContent').value.trim();
+  if(!date||!name||!start||!content){alert('日付・名前・開始時間・内容を入力してください');return;}
+  const {error}=await supabaseClient.from('セイトキ').insert([{ '日付':date,'名前':name,'開始時間':start,'終了時間':end,'内容':content }]);
+  if(error){console.error(error);alert('セイトキ予定の追加に失敗しました。Supabaseに「セイトキ」テーブルがあるか確認してください。');return;}
+  alert('セイトキ予定を追加しました');
+  document.getElementById('newSeitokiName').value='';
+  document.getElementById('newSeitokiStart').value='';
+  document.getElementById('newSeitokiEnd').value='';
+  document.getElementById('newSeitokiContent').value='';
+  seitokiCurrentDate=new Date(date+'T00:00:00');
+  await loadData();
+  showPage('seitoki',document.querySelector(".nav-item[onclick*='seitoki']"));
+  renderSeitokiDayList(date);
+}
+async function deleteSeitokiSchedule(id){
+  if(!isAdmin()){alert('管理ログインしてください');return;}
+  if(!confirm('このセイトキ予定を削除しますか？'))return;
+  const {error}=await supabaseClient.from('セイトキ').delete().eq('id',id);
+  if(error){console.error(error);alert('セイトキ予定の削除に失敗しました');return;}
+  alert('削除しました');
+  await loadData();
+}
+
 function showPage(pageId,element){
   document.querySelectorAll('.page-section').forEach(section=>{
     section.style.display='none';
@@ -1132,6 +1333,10 @@ function showPage(pageId,element){
   const target=document.getElementById(pageId);
   if(target){
     target.style.display='block';
+  }
+
+  if(pageId==='seitoki'){
+    renderSeitokiCalendar();
   }
 
   if(pageId==='search'){

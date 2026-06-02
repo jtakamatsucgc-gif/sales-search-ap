@@ -885,6 +885,162 @@ html{
   }
 }
 
+
+/* ===== セイトキ修正：予定カードを添付画像型に固定 / 時間を15分刻みセレクト化 ===== */
+#seitoki .seitoki-time-grid{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:12px !important;
+  width:100% !important;
+}
+
+#seitoki .seitoki-time-grid select{
+  min-width:0 !important;
+  width:100% !important;
+  padding:14px 15px !important;
+  border-radius:14px !important;
+  border:1px solid #dbe3ef !important;
+  background:#fff !important;
+  color:#0f172a !important;
+  font-size:15px !important;
+  outline:none !important;
+  font-family:inherit !important;
+  appearance:auto !important;
+  -webkit-appearance:menulist !important;
+}
+
+#seitoki .practice-detail{
+  display:grid !important;
+  grid-template-columns:1fr auto !important;
+  gap:14px !important;
+  align-items:center !important;
+  background:#fff !important;
+  border:1px solid #e2e8f0 !important;
+  border-radius:20px !important;
+  padding:16px !important;
+  box-shadow:0 10px 28px rgba(15,23,42,.05) !important;
+}
+
+#seitoki .practice-detail-left{
+  display:grid !important;
+  grid-template-columns:108px 1fr !important;
+  gap:18px !important;
+  align-items:center !important;
+  min-width:0 !important;
+}
+
+#seitoki .practice-detail-time{
+  border-left:5px solid #0ea5e9 !important;
+  padding-left:14px !important;
+  line-height:1.25 !important;
+  color:#0f172a !important;
+  min-width:0 !important;
+}
+
+#seitoki .practice-detail-time b{
+  display:block !important;
+  font-size:20px !important;
+  font-weight:1000 !important;
+  color:#0f172a !important;
+}
+
+#seitoki .practice-detail-time span{
+  display:block !important;
+  font-size:16px !important;
+  color:#94a3b8 !important;
+  font-weight:1000 !important;
+  margin-top:4px !important;
+}
+
+#seitoki .practice-detail-main{
+  min-width:0 !important;
+}
+
+#seitoki .practice-detail-main b{
+  display:block !important;
+  font-size:20px !important;
+  font-weight:1000 !important;
+  color:#0f172a !important;
+  line-height:1.35 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+#seitoki .practice-detail-main small{
+  display:block !important;
+  color:#475569 !important;
+  font-weight:1000 !important;
+  margin-top:4px !important;
+  font-size:16px !important;
+  line-height:1.35 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+#seitoki .practice-delete{
+  border:0 !important;
+  background:#fee2e2 !important;
+  color:#991b1b !important;
+  border-radius:16px !important;
+  padding:12px 16px !important;
+  font-size:14px !important;
+  font-weight:1000 !important;
+  white-space:nowrap !important;
+}
+
+@media(max-width:980px){
+  #seitoki .seitoki-time-grid{
+    grid-template-columns:1fr !important;
+    gap:10px !important;
+  }
+
+  #seitoki .seitoki-time-grid select{
+    padding:15px 14px !important;
+    font-size:16px !important;
+    border-radius:14px !important;
+  }
+
+  #seitoki .practice-detail{
+    grid-template-columns:1fr auto !important;
+    gap:10px !important;
+    border-radius:20px !important;
+    padding:16px !important;
+  }
+
+  #seitoki .practice-detail-left{
+    grid-template-columns:92px 1fr !important;
+    gap:14px !important;
+  }
+
+  #seitoki .practice-detail-time{
+    padding-left:12px !important;
+  }
+
+  #seitoki .practice-detail-time b{
+    font-size:20px !important;
+  }
+
+  #seitoki .practice-detail-time span{
+    font-size:15px !important;
+  }
+
+  #seitoki .practice-detail-main b{
+    font-size:20px !important;
+  }
+
+  #seitoki .practice-detail-main small{
+    font-size:16px !important;
+  }
+
+  #seitoki .practice-delete{
+    padding:11px 14px !important;
+    border-radius:16px !important;
+    font-size:13px !important;
+  }
+}
+
 </style>
 </head>
 
@@ -1568,6 +1724,9 @@ function buildTimeSelects(){
   const end=document.getElementById('newSeitokiEnd');
   if(!start||!end)return;
 
+  const currentStart=start.value||'';
+  const currentEnd=end.value||'';
+
   const times=[];
   for(let h=0;h<24;h++){
     for(let m=0;m<60;m+=15){
@@ -1579,6 +1738,9 @@ function buildTimeSelects(){
 
   start.innerHTML='<option value="">開始時間</option>'+times.map(time=>`<option value="${time}">${time}</option>`).join('');
   end.innerHTML='<option value="">終了時間</option>'+times.map(time=>`<option value="${time}">${time}</option>`).join('');
+
+  if(currentStart)start.value=currentStart;
+  if(currentEnd)end.value=currentEnd;
 }
 function changeSeitokiMonth(diff){
   seitokiCurrentDate=new Date(seitokiCurrentDate.getFullYear(),seitokiCurrentDate.getMonth()+diff,1);
@@ -1677,6 +1839,7 @@ function renderSeitokiDayList(dateKey){
       <button class="practice-delete" onclick="deleteSeitokiSchedule('${item.id}','${dateKey}')">削除</button>
     </div>
   `).join('')+addForm;
+  buildTimeSelects();
 }
 async function addSeitokiSchedule(){
   const date=document.getElementById('newSeitokiDate').value;

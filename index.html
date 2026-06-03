@@ -19,7 +19,7 @@
 <script>
 const SUPABASE_URL = 'https://aknclbhplcplkgbktfkw.supabase.co'
 const SUPABASE_KEY = 'sb_publishable_Hsc_-eDUTO96dWQSIfXU1A_SjuWRNjg'
-const ADMIN_PASSWORD = 'cs202606'
+const ADMIN_PASSWORD = 'cgc12345'
 const APP_PASSWORD = 'cgc12345'
 const PASSWORD_VERSION = 'v1'
 
@@ -1405,6 +1405,18 @@ html{
       </div>
     </div>
 
+    <div class="panel-card">
+      <div style="font-weight:900;font-size:18px;margin-bottom:14px">ナレッジ追加</div>
+      <div class="form-grid">
+        <input id="newKeyword" placeholder="質問・キーワード">
+        <select id="newCategory"><option>新電力</option><option>WS</option><option>VOD</option><option>営業</option><option>その他</option></select>
+        <textarea id="newAnswer" placeholder="回答内容"></textarea>
+        <input id="newReferenceUrl" placeholder="参考URL（任意）">
+        <button class="primary-btn" onclick="addKnowledge()">ナレッジ案を送信する</button>
+        <div class="status-line">送信後すぐには公開されません。管理者が確認してから公開されます。</div>
+      </div>
+    </div>
+
     <div id="requestList" class="unanswered-list"></div>
   </div>
 
@@ -1588,16 +1600,6 @@ function renderAdmin(){
         </div>`).join('')}
     </div>
     <div class="panel-card">
-      <div style="font-weight:900;font-size:18px;margin-bottom:14px">直接ナレッジ追加</div>
-      <div class="form-grid">
-        <input id="newKeyword" placeholder="質問・キーワード">
-        <select id="newCategory"><option>⚡ 新電力</option><option>💧 WS</option><option>🎬 VOD</option><option>📄 契約</option><option>🔢 明細</option><option>💰 料金</option><option>💲 解約金</option><option>🏃‍♂️‍➡️ 営業</option><option>🔥 クレーム</option><option>その他</option></select>
-        <textarea id="newAnswer" placeholder="回答内容"></textarea>
-        <input id="newReferenceUrl" placeholder="参考URL（任意）">
-        <button class="primary-btn" onclick="addKnowledge()">直接追加する</button>
-      </div>
-    </div>
-    <div class="panel-card">
       <div style="font-weight:900;font-size:18px;margin-bottom:14px">教材・資料追加</div>
       <div class="form-grid">
         <input id="newMaterialTitle" placeholder="教材・資料タイトル">
@@ -1608,11 +1610,6 @@ function renderAdmin(){
       </div>
     </div>
 
-    <div class="panel-card">
-      <div style="font-weight:900;font-size:18px;margin-bottom:14px">教材・資料の表示順</div>
-      <div class="status-line" style="margin-bottom:12px">上へ / 下へ を押すと、教材・資料ライブラリの並び順に反映されます。</div>
-      ${renderMaterialOrderManager()}
-    </div>
   `;
 }
 function unlockAdmin(){const pass=document.getElementById('adminPassword').value.trim();if(pass!==ADMIN_PASSWORD){alert('パスコードが違います');return;}localStorage.setItem('adminUnlocked','true');renderAdmin();}
@@ -1724,12 +1721,13 @@ async function rejectProposal(id){
   alert('却下しました');await loadData();
 }
 async function addKnowledge(){
-  if(!isAdmin()){alert('管理ログインしてください');return;}
   const question=document.getElementById('newKeyword').value.trim();const category=document.getElementById('newCategory').value;const answer=document.getElementById('newAnswer').value.trim();const url=document.getElementById('newReferenceUrl').value.trim();
   if(!question||!answer||!category){alert('質問・回答・カテゴリを入力してください');return;}
-  const {error}=await supabaseClient.from('回答').insert([{ '質問':question,'答え':answer,'カテゴリ':category,'参考URL':url }]);
-  if(error){console.error(error);alert('追加に失敗しました');return;}
-  alert('ナレッジを追加しました');await loadData();
+  const {error}=await supabaseClient.from('回答案').insert([{ '質問':question,'答え':answer,'カテゴリ':category,'参考URL':url,'状態':'審査中'}]);
+  if(error){console.error(error);alert('ナレッジ案の送信に失敗しました');return;}
+  alert('ナレッジ案を送信しました。管理者確認後に公開されます。');
+  document.getElementById('newKeyword').value='';document.getElementById('newAnswer').value='';document.getElementById('newReferenceUrl').value='';
+  await loadData();
 }
 async function addMaterial(){
   if(!isAdmin()){alert('管理ログインしてください');return;}

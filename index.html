@@ -1656,7 +1656,8 @@ function searchKnowledge(scrollToResults=true){
     const question=normalizeText(getQuestion(item));
     const answer=normalizeText(getAnswer(item));
     const category=normalizeText(getCategory(item));
-    const searchableText=question+answer+category;
+    const keywords=normalizeText(item['検索キーワード'] || '');
+    const searchableText=question+answer+category+keywords;
 
     const keywordMatch=keywordGroups.every(group=>
       group.some(term=>searchableText.includes(term))
@@ -1672,6 +1673,7 @@ function searchKnowledge(scrollToResults=true){
         if(question.includes(term)) score+=4;
         if(category.includes(term)) score+=3;
         if(answer.includes(term)) score+=1;
+        if(keywords.includes(term)) score+=5;
       });
     });
 

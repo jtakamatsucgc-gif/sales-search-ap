@@ -1326,6 +1326,10 @@ html{
         コンテンツ
       </button>
 
+      <button class="chip" onclick="filterMaterialCategory('研修', this)">
+        研修
+      </button>
+
       <button class="chip" onclick="filterMaterialCategory('新電力', this)">
         新電力
       </button>
@@ -1609,7 +1613,7 @@ function renderAdmin(){
         <input id="newMaterialTitle" placeholder="教材・資料タイトル">
         <input id="newMaterialUrl" placeholder="YouTube / PDF / 資料URL">
         <select id="newMaterialType"><option>動画</option><option>PDF</option><option>資料</option></select>
-        <select id="newMaterialCategory"><option>フォーム</option><option>資料・スクリプト</option><option>コンテンツ</option><option>新電力</option><option>WS</option><option>VOD</option><option>営業</option><option>就活</option><option>その他</option></select>
+        <select id="newMaterialCategory"><option>フォーム</option><option>資料・スクリプト</option><option>コンテンツ</option><option>新電力</option><option>WS</option><option>VOD</option><option>営業</option><option>就活</option><option>研修</option><option>その他</option></select>
         <button class="primary-btn" onclick="addMaterial()">教材・資料を追加する</button>
       </div>
     </div>

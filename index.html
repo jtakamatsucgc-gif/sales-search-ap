@@ -2600,6 +2600,12 @@ function kpiValue(source,key){
   return valueByPaths(source,map[key]||[key],null);
 }
 
+function getKpiRankHeader(){
+  const total=toNumber(metricsData?.current?.ranks?.rankTotal);
+  if(total===null||total<=0) return '順位';
+  return `順位（${formatMetric(total,0)}人中）`;
+}
+
 function getKpiRank(key){
   const ranks=metricsData?.current?.ranks||metricsData?.kpiRanks||metricsData?.ranks||{};
 
@@ -2948,7 +2954,7 @@ function renderMetrics(){
       <div class="metrics-section-title">月間KPI目標</div>
       <div class="metrics-kpi-wrap">
         <table class="metrics-kpi-table">
-          <thead><tr><th>項目</th><th>現状</th><th>目標</th><th>差異</th><th>順位</th></tr></thead>
+          <thead><tr><th>項目</th><th>現状</th><th>目標</th><th>差異</th><th>${getKpiRankHeader()}</th></tr></thead>
           <tbody>
             ${renderKpiRow('叩き / h','knocksPerHour')}
             ${renderKpiRow('対面 / h','facesPerHour')}

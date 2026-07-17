@@ -287,7 +287,7 @@ html{
 .nav{
   width:100%;
   display:grid;
-  grid-template-columns:repeat(5,1fr);
+  grid-template-columns:repeat(6,1fr);
   gap:0;
   align-items:center;
 }
@@ -1224,6 +1224,112 @@ html{
   }
 }
 
+
+/* ===== 数値タブ ===== */
+.metrics-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:16px;
+}
+.metrics-user-name{
+  font-size:28px;
+  font-weight:1000;
+  letter-spacing:-.04em;
+  line-height:1.2;
+}
+.metrics-user-sub{
+  color:#64748b;
+  font-size:14px;
+  font-weight:800;
+  margin-top:4px;
+}
+.metrics-register-card{
+  max-width:560px;
+  margin:22px auto 0;
+  text-align:center;
+  padding:30px;
+}
+.metrics-register-icon{
+  width:64px;
+  height:64px;
+  margin:0 auto 14px;
+  border-radius:20px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#0b63ff,#1447d8);
+  color:#fff;
+  font-size:30px;
+  box-shadow:0 14px 34px rgba(37,99,235,.28);
+}
+.metrics-register-title{
+  font-size:25px;
+  font-weight:1000;
+  letter-spacing:-.04em;
+  margin-bottom:6px;
+}
+.metrics-register-text{
+  color:#64748b;
+  font-size:14px;
+  font-weight:700;
+  margin-bottom:18px;
+}
+.metrics-overview{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-bottom:16px;
+}
+.metric-card{
+  background:#fff;
+  border:1px solid #e2e8f0;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 14px 42px rgba(15,23,42,.06);
+}
+.metric-card small{
+  display:block;
+  color:#64748b;
+  font-size:13px;
+  font-weight:900;
+  margin-bottom:6px;
+}
+.metric-card b{
+  display:block;
+  font-size:30px;
+  line-height:1.1;
+  font-weight:1000;
+  letter-spacing:-.04em;
+}
+.metric-card span{
+  display:block;
+  color:#94a3b8;
+  font-size:12px;
+  font-weight:800;
+  margin-top:7px;
+}
+.metrics-kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.metrics-placeholder{
+  color:#94a3b8;
+  font-weight:900;
+}
+@media(max-width:980px){
+  .nav-item{font-size:9px;}
+  .nav-icon{font-size:17px;}
+  .metrics-header{align-items:center;}
+  .metrics-user-name{font-size:23px;}
+  .metrics-register-card{margin-top:8px;padding:24px 18px;}
+  .metrics-overview{grid-template-columns:1fr 1fr;}
+  .metric-card{padding:16px;}
+  .metric-card b{font-size:26px;}
+  .metrics-kpi-grid{grid-template-columns:1fr 1fr;}
+}
+
 </style>
 </head>
 
@@ -1246,6 +1352,7 @@ html{
       <a class="nav-item active" onclick="showPage('search',this)"><span class="nav-icon">⌕</span>検索</a>
       <a class="nav-item" onclick="showPage('materials',this)"><span class="nav-icon">▶</span>教材</a>
       <a class="nav-item" onclick="showPage('seitoki',this)"><span class="nav-icon">📅</span>セイトキ</a>
+      <a class="nav-item" onclick="showPage('metrics',this)"><span class="nav-icon">📊</span>数値</a>
       <a class="nav-item" onclick="showPage('unanswered',this)"><span class="nav-icon">✉</span>未回答</a>
       <a class="nav-item" onclick="showPage('admin',this)"><span class="nav-icon">⚙</span>管理</a>
     </nav>
@@ -1381,6 +1488,15 @@ html{
       <div id="seitokiCalendar"></div>
       <div id="seitokiDayList" class="seitoki-list"></div>
     </div>
+  </div>
+
+  <div class="section-block page-section" id="metrics" style="display:none">
+    <div class="section-label">
+      <div class="section-icon">📊</div>
+      <h2 class="panel-title">数値</h2>
+    </div>
+
+    <div id="metricsArea"></div>
   </div>
 
   <div class="section-block page-section" id="admin" style="display:none">
@@ -2068,6 +2184,84 @@ async function deleteSeitokiSchedule(id,dateKey){
   renderSeitokiCalendar(dateKey);
 }
 
+
+const METRICS_USER_KEY='cfaMetricsUserName';
+
+function getMetricsUserName(){
+  return (localStorage.getItem(METRICS_USER_KEY)||'').trim();
+}
+
+function renderMetrics(){
+  const area=document.getElementById('metricsArea');
+  if(!area)return;
+
+  const userName=getMetricsUserName();
+
+  if(!userName){
+    area.innerHTML=`
+      <div class="panel-card metrics-register-card">
+        <div class="metrics-register-icon">👤</div>
+        <div class="metrics-register-title">あなたの名前を登録</div>
+        <div class="metrics-register-text">スプレッドシートに登録されている名前を入力してください。</div>
+        <div class="form-grid">
+          <input id="metricsUserNameInput" type="text" placeholder="例：高松" autocomplete="name" onkeydown="if(event.key==='Enter') saveMetricsUserName()">
+          <button class="primary-btn" onclick="saveMetricsUserName()">この名前で登録する</button>
+          <div class="status-line">この端末に保存され、次回から自動であなたの数値画面を表示します。</div>
+        </div>
+      </div>
+    `;
+    setTimeout(()=>document.getElementById('metricsUserNameInput')?.focus(),0);
+    return;
+  }
+
+  area.innerHTML=`
+    <div class="metrics-header">
+      <div>
+        <div class="metrics-user-name">${safeText(userName)}さんの数値</div>
+        <div class="metrics-user-sub">現在は画面の土台のみです。次の工程でスプレッドシートと連携します。</div>
+      </div>
+      <button class="secondary-btn" onclick="changeMetricsUser()">登録者を変更</button>
+    </div>
+
+    <div class="metrics-overview">
+      <div class="metric-card"><small>生産性</small><b class="metrics-placeholder">--</b><span>今月</span></div>
+      <div class="metric-card"><small>合計件数</small><b class="metrics-placeholder">--</b><span>電気・WS・VOD</span></div>
+      <div class="metric-card"><small>今月順位</small><b class="metrics-placeholder">--位</b><span>全体ランキング</span></div>
+      <div class="metric-card"><small>目標まで</small><b class="metrics-placeholder">あと--件</b><span>今月目標</span></div>
+    </div>
+
+    <div class="panel-card">
+      <div style="font-weight:1000;font-size:18px;margin-bottom:14px">KPI</div>
+      <div class="metrics-kpi-grid">
+        <div class="metric-card"><small>叩き / h</small><b class="metrics-placeholder">--</b></div>
+        <div class="metric-card"><small>応答率</small><b class="metrics-placeholder">--%</b></div>
+        <div class="metric-card"><small>対面率</small><b class="metrics-placeholder">--%</b></div>
+        <div class="metric-card"><small>プレ率</small><b class="metrics-placeholder">--%</b></div>
+        <div class="metric-card"><small>受注率</small><b class="metrics-placeholder">--%</b></div>
+        <div class="metric-card"><small>通過率</small><b class="metrics-placeholder">--%</b></div>
+        <div class="metric-card"><small>特典率</small><b class="metrics-placeholder">--%</b></div>
+      </div>
+    </div>
+  `;
+}
+
+function saveMetricsUserName(){
+  const input=document.getElementById('metricsUserNameInput');
+  const userName=input ? input.value.trim() : '';
+  if(!userName){
+    alert('名前を入力してください');
+    return;
+  }
+  localStorage.setItem(METRICS_USER_KEY,userName);
+  renderMetrics();
+}
+
+function changeMetricsUser(){
+  if(!confirm('登録している名前を変更しますか？'))return;
+  localStorage.removeItem(METRICS_USER_KEY);
+  renderMetrics();
+}
+
 function showPage(pageId,element){
   document.querySelectorAll('.page-section').forEach(section=>{
     section.style.display='none';
@@ -2080,6 +2274,10 @@ function showPage(pageId,element){
 
   if(pageId==='seitoki'){
     renderSeitokiCalendar();
+  }
+
+  if(pageId==='metrics'){
+    renderMetrics();
   }
 
   if(pageId==='search'){
@@ -2108,6 +2306,7 @@ window.addEventListener('DOMContentLoaded',async()=>{
   setHeroQuote();
   renderProposalForm();
   renderAdmin();
+  renderMetrics();
   await loadData();
   showPage('search',document.querySelector('.nav-item.active'));
 });

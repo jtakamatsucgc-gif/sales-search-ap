@@ -2401,6 +2401,14 @@ async function loadMetrics(force=false){
   }
 }
 
+function productCard(icon,label,value){
+  return `
+    <div class="metric-card">
+      <small>${icon} ${safeText(label)}</small>
+      <b>${formatMetric(value,0)}件</b>
+    </div>`;
+}
+
 function renderMetrics(){
   const area=document.getElementById('metricsArea');
   if(!area)return;
@@ -2464,36 +2472,57 @@ function renderMetrics(){
     return;
   }
 
-  const monthly=metricsData.monthly||{};
-  const productivity=valueByPaths(monthly,['productivity','生産性'],valueByPaths(metricsData,['productivity'],null));
-  const total=valueByPaths(monthly,['total','totalCount','monthlyTotal','合計件数'],valueByPaths(metricsData,['total','monthlyTotal'],0));
-  const target=valueByPaths(monthly,['target','monthlyTarget','目標件数'],valueByPaths(metricsData,['monthlyTarget'],null));
-  let remaining=valueByPaths(monthly,['remaining','remainingToTarget','targetRemaining','目標まで'],null);
-  if(remaining===null&&toNumber(target)!==null&&toNumber(total)!==null)remaining=Math.max(0,toNumber(target)-toNumber(total));
+  const monthly=metricsData?.monthly||{};
 
-  const rank=valueByPaths(monthly,['rank','ranking','順位'],valueByPaths(metricsData,['rank'],null));
+  const productivity=valueByPaths(
+    monthly,
+    ['currentProductivity','productivity','生産性'],
+    valueByPaths(metricsData,['productivity'],null)
+  );
+
+  const total=valueByPaths(
+    monthly,
+    ['currentCount','total','totalCount','monthlyTotal','合計件数'],
+    valueByPaths(metricsData,['total','monthlyTotal'],0)
+  );
+
+  const target=valueByPaths(
+    monthly,
+    ['goalCount','target','monthlyTarget','目標件数'],
+    valueByPaths(metricsData,['monthlyTarget'],null)
+  );
+
+  let remaining=valueByPaths(
+    monthly,
+    ['remainingToGoal','remaining','remainingToTarget','targetRemaining','目標まで'],
+    null
+  );
+
+  if(remaining===null&&toNumber(target)!==null&&toNumber(total)!==null){
+    remaining=Math.max(0,toNumber(target)-toNumber(total));
+  }
+
+  const rank=valueByPaths(
+    monthly,
+    ['rank','ranking','順位'],
+    valueByPaths(metricsData,['rank'],null)
+  );
+
   const rankingDisplay=getRankingDisplay(userName,total,rank);
   const rankUp=rankingDisplay.remaining;
 
-  const monthly = metricsData?.monthly || {};
+  const totalCount=Number(monthly.currentCount??0);
+  const projectedCount=Number(monthly.projectedCount??0);
 
-const totalCount = Number(
-  monthly.currentCount ?? 0
-);
-
-const projectedCount = Number(
-  monthly.projectedCount ?? 0
-);
-
-  const electricity = productValue(metricsData, [
-  'electric',
-  'electricity',
-  '電気',
-  '新電力'
-]);
+  const electricity=productValue(metricsData,[
+    'electric',
+    'electricity',
+    '電気',
+    '新電力'
+  ]);
   const ws=productValue(metricsData,['ws','WS','waterServer','ウォーターサーバー']);
   const vod=productValue(metricsData,['vod','VOD']);
-  const card=productValue(metricsData,['card','creditCard','クレカ','カード']);
+  const creditCard=productValue(metricsData,['card','creditCard','クレカ','カード']);
 
   area.innerHTML=`
     <div class="metrics-header">
@@ -2537,17 +2566,17 @@ const projectedCount = Number(
     </div>
 
     <div class="metrics-section-title">商材ごと件数</div>
-    <div class="metrics-product-grid metrics-summary-grid">
-  ${productCard('📊', '合計件数', totalCount)}
-  ${productCard('🎯', '着地', projectedCount)}
-</div>
+    <div class="metrics-products">
+      ${productCard('📊','合計件数',totalCount)}
+      ${productCard('🎯','着地',projectedCount)}
+    </div>
 
-<div class="metrics-product-grid">
-  ${productCard('⚡', '電気', electricity)}
-  ${productCard('💧', 'WS', ws)}
-  ${productCard('🎬', 'VOD', vod)}
-  ${productCard('💳', 'クレカ', creditCard)}
-</div>
+    <div class="metrics-products">
+      ${productCard('⚡','電気',electricity)}
+      ${productCard('💧','WS',ws)}
+      ${productCard('🎬','VOD',vod)}
+      ${productCard('💳','クレカ',creditCard)}
+    </div>
 
     <div class="panel-card">
       <div class="metrics-section-title">月間KPI目標</div>

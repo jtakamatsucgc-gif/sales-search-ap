@@ -2390,7 +2390,7 @@ async function loadMetrics(force=false){
       throw new Error(data?.message||data?.error||'数値データを取得できませんでした');
     }
 
-    metricsData=data;
+    metricsData = data?.data || data;
   }catch(error){
     console.error('数値API取得エラー',error);
     metricsData=null;

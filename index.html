@@ -1265,6 +1265,7 @@ html{
 .metrics-today-item b{display:block;font-size:28px;line-height:1.15;margin-top:5px;font-weight:1000}
 .metrics-today-item span{display:block;color:#dbeafe;font-size:12px;font-weight:800;margin-top:5px}
 .metrics-products{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.metrics-summary-products{grid-template-columns:repeat(2,minmax(0,1fr))}
 .metric-card{
   background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:18px;
   box-shadow:0 14px 42px rgba(15,23,42,.06)
@@ -1303,6 +1304,7 @@ html{
   .metrics-today{padding:18px}
   .metrics-today-grid{grid-template-columns:1fr}
   .metrics-products{grid-template-columns:1fr 1fr}
+  .metrics-summary-products{grid-template-columns:repeat(2,minmax(0,1fr))}
   .metric-card{padding:16px}.metric-card b{font-size:26px}
   .metrics-kpi-table th,.metrics-kpi-table td{padding:12px 8px;font-size:12px}
   .metrics-kpi-table th{font-size:10px}
@@ -2293,71 +2295,38 @@ function normalizeRankingEntry(entry,index){
 
 function getRankingDisplay(userName,total,rank){
   const monthly=metricsData?.monthly||{};
+  const ranking=metricsData?.ranking||{};
 
   const currentRank=toNumber(
     monthly.rank ??
     monthly.currentRank ??
-    rank
+    valueByPaths(ranking,['currentRank','rank','順位'],rank)
   );
 
   const upperRank=toNumber(
     monthly.nextRank ??
     monthly.upperRank ??
-    (
-      currentRank!==null && currentRank>1
-        ? currentRank-1
-        : null
+    valueByPaths(ranking,['upperRank','nextRank','一個上の順位'],
+      currentRank!==null&&currentRank>1 ? currentRank-1 : null
     )
   );
 
   const remaining=toNumber(
     monthly.remainingToNextRank ??
     monthly.remainingToRankUp ??
-    monthly.rankUpRemaining
+    monthly.rankUpRemaining ??
+    valueByPaths(ranking,[
+      'remainingToNextRank',
+      'remainingToRankUp',
+      'rankUpRemaining',
+      'differenceToUpper',
+      '順位UPまで'
+    ],null)
   );
 
   return {
     currentRank,
     upperRank,
-    remaining
-  };
-}
-    if(me){
-      const meRank=toNumber(me.rank)??currentRank;
-      const above=entries
-        .filter(entry=>entry.total!==null&&(
-          (meRank!==null&&entry.rank===meRank-1) ||
-          (entry.total>currentTotal)
-        ))
-        .sort((a,b)=>{
-          if(meRank!==null){
-            const aExact=a.rank===meRank-1?0:1;
-            const bExact=b.rank===meRank-1?0:1;
-            if(aExact!==bExact)return aExact-bExact;
-          }
-          return a.total-b.total;
-        })[0];
-
-      if(above){
-        upperRank=above.rank;
-        upperTotal=above.total;
-      }
-    }
-  }
-
-  let remaining=toNumber(valueByPaths(ranking||{},[
-    'remainingToRankUp','rankUpRemaining','differenceToUpper','順位UPまで'
-  ],null));
-
-  // ユーザー指定：+1せず、同点までの差を表示
-  if(upperTotal!==null&&currentTotal!==null){
-    remaining=Math.max(0,upperTotal-currentTotal);
-  }
-
-  return {
-    currentRank,
-    upperRank:upperRank??(currentRank!==null&&currentRank>1?currentRank-1:null),
-    upperTotal,
     remaining
   };
 }
@@ -2566,7 +2535,7 @@ function renderMetrics(){
     </div>
 
     <div class="metrics-section-title">商材ごと件数</div>
-    <div class="metrics-products">
+    <div class="metrics-products metrics-summary-products">
       ${productCard('📊','合計件数',totalCount)}
       ${productCard('🎯','着地',projectedCount)}
     </div>

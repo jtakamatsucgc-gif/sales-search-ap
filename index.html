@@ -2292,36 +2292,36 @@ function normalizeRankingEntry(entry,index){
 }
 
 function getRankingDisplay(userName,total,rank){
-  const ranking=metricsData?.ranking;
-  const currentTotal=toNumber(total);
+  const monthly=metricsData?.monthly||{};
+
   const currentRank=toNumber(
-    valueByPaths(ranking||{},['currentRank','rank','順位'],rank)
+    monthly.rank ??
+    monthly.currentRank ??
+    rank
   );
 
-  let upperRank=toNumber(valueByPaths(ranking||{},['upperRank','nextRank','一個上の順位'],null));
-  let upperTotal=toNumber(valueByPaths(ranking||{},[
-    'upperTotal','nextTotal','upperPersonTotal','nextPersonTotal',
-    '一個上の合計件数','一個上の件数'
-  ],null));
+  const upperRank=toNumber(
+    monthly.nextRank ??
+    monthly.upperRank ??
+    (
+      currentRank!==null && currentRank>1
+        ? currentRank-1
+        : null
+    )
+  );
 
-  const list=Array.isArray(ranking)
-    ? ranking
-    : Array.isArray(ranking?.list)
-      ? ranking.list
-      : Array.isArray(ranking?.members)
-        ? ranking.members
-        : Array.isArray(ranking?.ranking)
-          ? ranking.ranking
-          : [];
+  const remaining=toNumber(
+    monthly.remainingToNextRank ??
+    monthly.remainingToRankUp ??
+    monthly.rankUpRemaining
+  );
 
-  if(list.length&&currentTotal!==null){
-    const entries=list.map(normalizeRankingEntry).filter(Boolean);
-    let me=entries.find(entry=>entry.name&&entry.name===userName);
-
-    if(!me&&currentRank!==null){
-      me=entries.find(entry=>entry.rank===currentRank);
-    }
-
+  return {
+    currentRank,
+    upperRank,
+    remaining
+  };
+}
     if(me){
       const meRank=toNumber(me.rank)??currentRank;
       const above=entries

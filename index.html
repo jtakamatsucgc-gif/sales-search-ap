@@ -1285,6 +1285,15 @@ html{
 .metrics-kpi-table th:first-child,.metrics-kpi-table td:first-child{text-align:left}
 .metrics-kpi-table tr:last-child td{border-bottom:0}
 .metrics-diff.plus{color:#16a34a}.metrics-diff.minus{color:#dc2626}.metrics-diff.zero{color:#64748b}
+.metrics-diff-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:72px;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:1000
+}
+.metrics-diff-badge.achieved{background:#dcfce7;color:#15803d}
+.metrics-diff-badge.remaining{background:#fee2e2;color:#b91c1c}
+.metrics-diff-badge.unset{background:#f1f5f9;color:#64748b}
+.metrics-rank-main{font-size:30px!important}
+.metrics-rank-up{color:#fde68a!important}
 .metrics-note{margin-top:12px;color:#64748b;font-size:12px;font-weight:800}
 .metrics-refresh{display:flex;gap:8px;flex-wrap:wrap}
 @media(max-width:980px){
@@ -2237,25 +2246,122 @@ function kpiValue(source,key){
 function renderKpiRow(label,key,type='number'){
   const current=kpiValue(metricsData?.current||{},key);
   const target=kpiValue(metricsData?.target||{},key);
-  let difference=kpiValue(metricsData?.difference||{},key);
+  const currentNumber=toNumber(current);
+  const targetNumber=toNumber(target);
 
-  if(difference===null){
-    const currentNumber=toNumber(current);
-    const targetNumber=toNumber(target);
-    if(currentNumber!==null&&targetNumber!==null)difference=currentNumber-targetNumber;
-  }
-
-  const diff=formatDiff(difference,type);
   const currentText=type==='percent'?formatPercent(current):formatMetric(current);
   const targetText=type==='percent'?formatPercent(target):formatMetric(target);
+
+  let statusText='未設定';
+  let statusClass='unset';
+
+  if(currentNumber!==null&&targetNumber!==null){
+    const currentNormalized=type==='percent'&&Math.abs(currentNumber)<=1 ? currentNumber*100 : currentNumber;
+    const targetNormalized=type==='percent'&&Math.abs(targetNumber)<=1 ? targetNumber*100 : targetNumber;
+    const remaining=targetNormalized-currentNormalized;
+
+    if(remaining<=0){
+      statusText='✓ 達成';
+      statusClass='achieved';
+    }else{
+      statusText=type==='percent'
+        ? `あと${formatMetric(remaining,1)}%`
+        : `あと${formatMetric(remaining,2)}`;
+      statusClass='remaining';
+    }
+  }
 
   return `<tr>
     <td>${safeText(label)}</td>
     <td>${currentText}</td>
     <td>${targetText}</td>
-    <td class="metrics-diff ${diff.className}">${diff.text}</td>
+    <td><span class="metrics-diff-badge ${statusClass}">${statusText}</span></td>
   </tr>`;
 }
+
+function normalizeRankingEntry(entry,index){
+  if(entry===null||entry===undefined)return null;
+  if(typeof entry==='number'||typeof entry==='string'){
+    return {rank:index+1,name:'',total:toNumber(entry)};
+  }
+  return {
+    rank:toNumber(valueByPaths(entry,['rank','ranking','順位'],index+1)),
+    name:String(valueByPaths(entry,['name','memberName','氏名','名前'],'')||'').trim(),
+    total:toNumber(valueByPaths(entry,['total','totalCount','monthlyTotal','合計件数','件数','score'],null))
+  };
+}
+
+function getRankingDisplay(userName,total,rank){
+  const ranking=metricsData?.ranking;
+  const currentTotal=toNumber(total);
+  const currentRank=toNumber(
+    valueByPaths(ranking||{},['currentRank','rank','順位'],rank)
+  );
+
+  let upperRank=toNumber(valueByPaths(ranking||{},['upperRank','nextRank','一個上の順位'],null));
+  let upperTotal=toNumber(valueByPaths(ranking||{},[
+    'upperTotal','nextTotal','upperPersonTotal','nextPersonTotal',
+    '一個上の合計件数','一個上の件数'
+  ],null));
+
+  const list=Array.isArray(ranking)
+    ? ranking
+    : Array.isArray(ranking?.list)
+      ? ranking.list
+      : Array.isArray(ranking?.members)
+        ? ranking.members
+        : Array.isArray(ranking?.ranking)
+          ? ranking.ranking
+          : [];
+
+  if(list.length&&currentTotal!==null){
+    const entries=list.map(normalizeRankingEntry).filter(Boolean);
+    let me=entries.find(entry=>entry.name&&entry.name===userName);
+
+    if(!me&&currentRank!==null){
+      me=entries.find(entry=>entry.rank===currentRank);
+    }
+
+    if(me){
+      const meRank=toNumber(me.rank)??currentRank;
+      const above=entries
+        .filter(entry=>entry.total!==null&&(
+          (meRank!==null&&entry.rank===meRank-1) ||
+          (entry.total>currentTotal)
+        ))
+        .sort((a,b)=>{
+          if(meRank!==null){
+            const aExact=a.rank===meRank-1?0:1;
+            const bExact=b.rank===meRank-1?0:1;
+            if(aExact!==bExact)return aExact-bExact;
+          }
+          return a.total-b.total;
+        })[0];
+
+      if(above){
+        upperRank=above.rank;
+        upperTotal=above.total;
+      }
+    }
+  }
+
+  let remaining=toNumber(valueByPaths(ranking||{},[
+    'remainingToRankUp','rankUpRemaining','differenceToUpper','順位UPまで'
+  ],null));
+
+  // ユーザー指定：+1せず、同点までの差を表示
+  if(upperTotal!==null&&currentTotal!==null){
+    remaining=Math.max(0,upperTotal-currentTotal);
+  }
+
+  return {
+    currentRank,
+    upperRank:upperRank??(currentRank!==null&&currentRank>1?currentRank-1:null),
+    upperTotal,
+    remaining
+  };
+}
+
 
 async function loadMetrics(force=false){
   const userName=getMetricsUserName();
@@ -2366,7 +2472,8 @@ function renderMetrics(){
   if(remaining===null&&toNumber(target)!==null&&toNumber(total)!==null)remaining=Math.max(0,toNumber(target)-toNumber(total));
 
   const rank=valueByPaths(monthly,['rank','ranking','順位'],valueByPaths(metricsData,['rank'],null));
-  const rankUp=valueByPaths(monthly,['remainingToRankUp','rankUpRemaining','順位UPまで'],valueByPaths(metricsData,['remainingToRankUp'],null));
+  const rankingDisplay=getRankingDisplay(userName,total,rank);
+  const rankUp=rankingDisplay.remaining;
 
   const electricity=productValue(metricsData,['electricity','電気','新電力']);
   const ws=productValue(metricsData,['ws','WS','waterServer','ウォーターサーバー']);
@@ -2399,9 +2506,17 @@ function renderMetrics(){
           <span>${formatMetric(total,0)} / ${formatMetric(target,0)}件</span>
         </div>
         <div class="metrics-today-item">
-          <small>順位UPまで</small>
-          <b>${rankUp===null?'--':`あと${formatMetric(rankUp,0)}件`}</b>
-          <span>現在 ${rank===null?'--':`${formatMetric(rank,0)}位`}</span>
+          <small>現在順位</small>
+          <b class="metrics-rank-main">${rankingDisplay.currentRank===null?'--':`${formatMetric(rankingDisplay.currentRank,0)}位`}</b>
+          <span class="metrics-rank-up">${
+            rankingDisplay.currentRank===1
+              ? '🏆 現在1位'
+              : rankUp===null
+                ? '一個上の件数データなし'
+                : rankUp<=0
+                  ? `🎉 ${rankingDisplay.upperRank===null?'上位':`${formatMetric(rankingDisplay.upperRank,0)}位`}に到達！`
+                  : `${rankingDisplay.upperRank===null?'一個上':`${formatMetric(rankingDisplay.upperRank,0)}位`}まで あと${formatMetric(rankUp,0)}件`
+          }</span>
         </div>
       </div>
     </div>
@@ -2471,7 +2586,7 @@ function showPage(pageId,element){
 
   if(pageId==='metrics'){
     renderMetrics();
-    if(getMetricsUserName())loadMetrics();
+    if(getMetricsUserName())loadMetrics(true);
   }
 
   if(pageId==='search'){

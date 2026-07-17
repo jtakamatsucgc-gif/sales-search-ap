@@ -2475,6 +2475,16 @@ function renderMetrics(){
   const rankingDisplay=getRankingDisplay(userName,total,rank);
   const rankUp=rankingDisplay.remaining;
 
+  const monthly = metricsData?.monthly || {};
+
+const totalCount = Number(
+  monthly.currentCount ?? 0
+);
+
+const projectedCount = Number(
+  monthly.projectedCount ?? 0
+);
+
   const electricity = productValue(metricsData, [
   'electric',
   'electricity',
@@ -2526,13 +2536,18 @@ function renderMetrics(){
       </div>
     </div>
 
-    <div class="metrics-section-title">商品件数</div>
-    <div class="metrics-products">
-      <div class="metric-card"><small>⚡ 電気</small><b>${formatMetric(electricity,0)}件</b></div>
-      <div class="metric-card"><small>💧 WS</small><b>${formatMetric(ws,0)}件</b></div>
-      <div class="metric-card"><small>🎬 VOD</small><b>${formatMetric(vod,0)}件</b></div>
-      <div class="metric-card"><small>💳 クレカ</small><b>${formatMetric(card,0)}件</b></div>
-    </div>
+    <div class="metrics-section-title">商材ごと件数</div>
+    <div class="metrics-product-grid metrics-summary-grid">
+  ${productCard('📊', '合計件数', totalCount)}
+  ${productCard('🎯', '着地', projectedCount)}
+</div>
+
+<div class="metrics-product-grid">
+  ${productCard('⚡', '電気', electricity)}
+  ${productCard('💧', 'WS', ws)}
+  ${productCard('🎬', 'VOD', vod)}
+  ${productCard('💳', 'クレカ', creditCard)}
+</div>
 
     <div class="panel-card">
       <div class="metrics-section-title">月間KPI目標</div>

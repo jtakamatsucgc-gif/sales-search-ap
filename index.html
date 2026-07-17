@@ -2475,7 +2475,12 @@ function renderMetrics(){
   const rankingDisplay=getRankingDisplay(userName,total,rank);
   const rankUp=rankingDisplay.remaining;
 
-  const electricity=productValue(metricsData,['electricity','電気','新電力']);
+  const electricity = productValue(metricsData, [
+  'electric',
+  'electricity',
+  '電気',
+  '新電力'
+]);
   const ws=productValue(metricsData,['ws','WS','waterServer','ウォーターサーバー']);
   const vod=productValue(metricsData,['vod','VOD']);
   const card=productValue(metricsData,['card','creditCard','クレカ','カード']);

@@ -1297,6 +1297,88 @@ html{
 .metrics-rank-up{color:#fde68a!important}
 .metrics-note{margin-top:12px;color:#64748b;font-size:12px;font-weight:800}
 .metrics-refresh{display:flex;gap:8px;flex-wrap:wrap}
+.metrics-goal-card{
+  display:none;
+  background:#fff;
+  border:1px solid #dbe3ef;
+  border-radius:22px;
+  padding:20px;
+  margin-bottom:16px;
+  box-shadow:0 14px 42px rgba(15,23,42,.06)
+}
+.metrics-goal-card.open{display:block}
+.metrics-goal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:14px
+}
+.metrics-goal-title{font-size:20px;font-weight:1000;letter-spacing:-.035em}
+.metrics-goal-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px
+}
+.metrics-goal-field{display:grid;gap:6px}
+.metrics-goal-field label{
+  color:#475569;
+  font-size:13px;
+  font-weight:1000
+}
+.metrics-goal-field input{
+  width:100%;
+  min-width:0;
+  border:1px solid #dbe3ef;
+  border-radius:14px;
+  padding:13px 14px;
+  font-size:16px;
+  font-weight:900;
+  outline:none;
+  background:#fff;
+  color:#0f172a
+}
+.metrics-goal-field input:focus{
+  border-color:#0b63ff;
+  box-shadow:0 0 0 3px rgba(11,99,255,.12)
+}
+.metrics-goal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:16px;
+  flex-wrap:wrap
+}
+.metrics-goal-saved{
+  color:#15803d;
+  font-size:13px;
+  font-weight:900;
+  margin-right:auto;
+  align-self:center
+}
+
+/* KPI表：スマホでも横スクロールなしで読める範囲まで拡大 */
+.metrics-kpi-wrap{width:100%;overflow:hidden}
+.metrics-kpi-table{table-layout:fixed}
+.metrics-kpi-table th:nth-child(1),
+.metrics-kpi-table td:nth-child(1){width:27%}
+.metrics-kpi-table th:nth-child(2),
+.metrics-kpi-table td:nth-child(2){width:19%}
+.metrics-kpi-table th:nth-child(3),
+.metrics-kpi-table td:nth-child(3){width:19%}
+.metrics-kpi-table th:nth-child(4),
+.metrics-kpi-table td:nth-child(4){width:35%}
+.metrics-kpi-table th,.metrics-kpi-table td{
+  font-size:16px;
+  padding:14px 10px
+}
+.metrics-kpi-table th{font-size:13px}
+.metrics-diff-badge{
+  min-width:86px;
+  font-size:14px;
+  padding:7px 10px
+}
+
 @media(max-width:980px){
   .nav-item{font-size:9px}.nav-icon{font-size:17px}
   .metrics-header{align-items:center}.metrics-user-name{font-size:23px}
@@ -1308,6 +1390,39 @@ html{
   .metric-card{padding:16px}.metric-card b{font-size:26px}
   .metrics-kpi-table th,.metrics-kpi-table td{padding:12px 8px;font-size:12px}
   .metrics-kpi-table th{font-size:10px}
+}
+
+
+@media(max-width:980px){
+  .metrics-goal-card{padding:16px}
+  .metrics-goal-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .metrics-goal-title{font-size:18px}
+  .metrics-goal-field label{font-size:12px}
+  .metrics-goal-field input{font-size:16px;padding:12px}
+  .metrics-kpi-table th,.metrics-kpi-table td{
+    padding:12px 5px;
+    font-size:14px;
+    letter-spacing:-.02em
+  }
+  .metrics-kpi-table th{font-size:12px}
+  .metrics-diff-badge{
+    min-width:78px;
+    padding:6px 6px;
+    font-size:12px
+  }
+}
+@media(max-width:380px){
+  .metrics-goal-grid{grid-template-columns:1fr 1fr}
+  .metrics-kpi-table th,.metrics-kpi-table td{
+    padding:11px 4px;
+    font-size:13px
+  }
+  .metrics-kpi-table th{font-size:11px}
+  .metrics-diff-badge{
+    min-width:70px;
+    font-size:11px;
+    padding:6px 4px
+  }
 }
 
 </style>
@@ -2170,9 +2285,133 @@ const METRICS_API_URL='https://script.google.com/macros/s/AKfycbwU7kecqmHYyYSn1Q
 let metricsLoading=false;
 let metricsData=null;
 let metricsError='';
+let metricsGoalEditorOpen=false;
+const METRICS_GOALS_KEY='cgcMetricsGoalsV1';
 
 function getMetricsUserName(){
   return (localStorage.getItem(METRICS_USER_KEY)||'').trim();
+}
+
+function getAllMetricsGoals(){
+  try{
+    const parsed=JSON.parse(localStorage.getItem(METRICS_GOALS_KEY)||'{}');
+    return parsed&&typeof parsed==='object'?parsed:{};
+  }catch(error){
+    console.warn('目標設定の読み込みに失敗しました',error);
+    return {};
+  }
+}
+
+function getMetricsGoals(userName=getMetricsUserName()){
+  if(!userName)return {};
+  return getAllMetricsGoals()[userName]||{};
+}
+
+function getGoalValue(key,fallback=null){
+  const goals=getMetricsGoals();
+  const value=goals[key];
+  return value!==undefined&&value!==null&&value!=='' ? value : fallback;
+}
+
+function saveMetricsGoals(){
+  const userName=getMetricsUserName();
+  if(!userName)return;
+
+  const fieldIds={
+    goalCount:'goalCount',
+    productivity:'goalProductivity',
+    knocksPerHour:'goalKnocksPerHour',
+    facesPerHour:'goalFacesPerHour',
+    presentationsPerHour:'goalPresentationsPerHour',
+    responseRate:'goalResponseRate',
+    faceRate:'goalFaceRate',
+    presentationRate:'goalPresentationRate',
+    orderRate:'goalOrderRate',
+    passRate:'goalPassRate',
+    crankInRate:'goalCrankInRate',
+    benefitRate:'goalBenefitRate'
+  };
+
+  const goals={};
+  Object.entries(fieldIds).forEach(([key,id])=>{
+    const element=document.getElementById(id);
+    const raw=element?element.value.trim():'';
+    if(raw==='')return;
+    const number=Number(raw);
+    if(Number.isFinite(number))goals[key]=number;
+  });
+
+  const all=getAllMetricsGoals();
+  all[userName]=goals;
+  localStorage.setItem(METRICS_GOALS_KEY,JSON.stringify(all));
+  metricsGoalEditorOpen=false;
+  renderMetrics();
+}
+
+function clearMetricsGoals(){
+  const userName=getMetricsUserName();
+  if(!userName)return;
+  if(!confirm('この端末に保存した目標設定をすべて削除しますか？'))return;
+
+  const all=getAllMetricsGoals();
+  delete all[userName];
+  localStorage.setItem(METRICS_GOALS_KEY,JSON.stringify(all));
+  metricsGoalEditorOpen=false;
+  renderMetrics();
+}
+
+function toggleMetricsGoalEditor(force){
+  metricsGoalEditorOpen=typeof force==='boolean' ? force : !metricsGoalEditorOpen;
+  renderMetrics();
+  if(metricsGoalEditorOpen){
+    setTimeout(()=>document.getElementById('goalCount')?.focus(),0);
+  }
+}
+
+function goalInputField(label,id,key,step='0.1',suffix=''){
+  const value=getGoalValue(key,'');
+  return `
+    <div class="metrics-goal-field">
+      <label for="${id}">${safeText(label)}${suffix?`（${safeText(suffix)}）`:''}</label>
+      <input id="${id}" type="number" inputmode="decimal" min="0" step="${step}" value="${value===''?'':safeText(value)}" placeholder="未設定">
+    </div>`;
+}
+
+function renderMetricsGoalEditor(){
+  const goals=getMetricsGoals();
+  const hasGoals=Object.keys(goals).length>0;
+
+  return `
+    <div class="metrics-goal-card ${metricsGoalEditorOpen?'open':''}">
+      <div class="metrics-goal-head">
+        <div>
+          <div class="metrics-goal-title">目標設定</div>
+          <div class="status-line">入力した目標は、この端末の登録者ごとに保存されます。</div>
+        </div>
+        <button class="secondary-btn" onclick="toggleMetricsGoalEditor(false)">閉じる</button>
+      </div>
+
+      <div class="metrics-goal-grid">
+        ${goalInputField('目標件数','goalCount','goalCount','1','件')}
+        ${goalInputField('目標生産性','goalProductivity','productivity','0.01')}
+        ${goalInputField('叩き / h','goalKnocksPerHour','knocksPerHour','0.01')}
+        ${goalInputField('対面 / h','goalFacesPerHour','facesPerHour','0.01')}
+        ${goalInputField('プレ / h','goalPresentationsPerHour','presentationsPerHour','0.01')}
+        ${goalInputField('応答率','goalResponseRate','responseRate','0.1','%')}
+        ${goalInputField('対面率','goalFaceRate','faceRate','0.1','%')}
+        ${goalInputField('プレ率','goalPresentationRate','presentationRate','0.1','%')}
+        ${goalInputField('受注率','goalOrderRate','orderRate','0.1','%')}
+        ${goalInputField('通過率','goalPassRate','passRate','0.1','%')}
+        ${goalInputField('クランクイン率','goalCrankInRate','crankInRate','0.1','%')}
+        ${goalInputField('特典率','goalBenefitRate','benefitRate','0.1','%')}
+      </div>
+
+      <div class="metrics-goal-actions">
+        ${hasGoals?'<button class="danger-btn" onclick="clearMetricsGoals()">目標を削除</button>':''}
+        <span class="metrics-goal-saved">${hasGoals?'保存済み':''}</span>
+        <button class="primary-btn" onclick="saveMetricsGoals()">目標を保存</button>
+      </div>
+    </div>`;
 }
 
 function valueByPaths(object,paths,fallback=null){
@@ -2247,7 +2486,7 @@ function kpiValue(source,key){
 
 function renderKpiRow(label,key,type='number'){
   const current=kpiValue(metricsData?.current||{},key);
-  const target=kpiValue(metricsData?.target||{},key);
+  const target=getGoalValue(key,kpiValue(metricsData?.target||{},key));
   const currentNumber=toNumber(current);
   const targetNumber=toNumber(target);
 
@@ -2455,10 +2694,18 @@ function renderMetrics(){
     valueByPaths(metricsData,['total','monthlyTotal'],0)
   );
 
-  const target=valueByPaths(
-    monthly,
-    ['goalCount','target','monthlyTarget','目標件数'],
-    valueByPaths(metricsData,['monthlyTarget'],null)
+  const target=getGoalValue(
+    'goalCount',
+    valueByPaths(
+      monthly,
+      ['goalCount','target','monthlyTarget','目標件数'],
+      valueByPaths(metricsData,['monthlyTarget'],null)
+    )
+  );
+
+  const productivityTarget=getGoalValue(
+    'productivity',
+    valueByPaths(metricsData.target||{},['productivity','生産性'],null)
   );
 
   let remaining=valueByPaths(
@@ -2500,10 +2747,13 @@ function renderMetrics(){
         <div class="metrics-user-sub">最新の月間実績を表示しています</div>
       </div>
       <div class="metrics-refresh">
+        <button class="primary-btn" onclick="toggleMetricsGoalEditor()">目標設定</button>
         <button class="secondary-btn" onclick="loadMetrics(true)">更新</button>
         <button class="secondary-btn" onclick="changeMetricsUser()">登録者を変更</button>
       </div>
     </div>
+
+    ${renderMetricsGoalEditor()}
 
     <div class="metrics-today">
       <div class="metrics-today-title">🔥 今日の目標</div>
@@ -2511,7 +2761,7 @@ function renderMetrics(){
         <div class="metrics-today-item">
           <small>目標生産性</small>
           <b>${formatMetric(productivity)}</b>
-          <span>目標 ${formatMetric(valueByPaths(metricsData.target||{},['productivity','生産性'],null))}</span>
+          <span>目標 ${formatMetric(productivityTarget)}</span>
         </div>
         <div class="metrics-today-item">
           <small>月間目標まで</small>
@@ -2552,7 +2802,7 @@ function renderMetrics(){
 
     <div class="panel-card">
       <div class="metrics-section-title">月間KPI目標</div>
-      <div style="overflow-x:auto">
+      <div class="metrics-kpi-wrap">
         <table class="metrics-kpi-table">
           <thead><tr><th>項目</th><th>現状</th><th>目標</th><th>差異</th></tr></thead>
           <tbody>
@@ -2565,10 +2815,11 @@ function renderMetrics(){
             ${renderKpiRow('受注率','orderRate','percent')}
             ${renderKpiRow('通過率','passRate','percent')}
             ${renderKpiRow('クランクイン率','crankInRate','percent')}
+            ${renderKpiRow('特典率','benefitRate','percent')}
           </tbody>
         </table>
       </div>
-      ${metricsData.targetRegistered===false?'<div class="metrics-note">この名前のKPI目標はまだ登録されていません。</div>':''}
+      ${metricsData.targetRegistered===false&&Object.keys(getMetricsGoals()).length===0?'<div class="metrics-note">目標設定ボタンからKPI目標を登録してください。</div>':''}
     </div>`;
 }
 
@@ -2586,6 +2837,7 @@ function saveMetricsUserName(){
 function changeMetricsUser(){
   if(!confirm('登録している名前を変更しますか？'))return;
   localStorage.removeItem(METRICS_USER_KEY);
+  metricsGoalEditorOpen=false;
   metricsData=null;
   metricsError='';
   renderMetrics();

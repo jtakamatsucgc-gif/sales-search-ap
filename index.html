@@ -1675,6 +1675,150 @@ html{
   }
 }
 
+
+/* ===== KPI表：差異まで一目で見えるよう列幅を圧縮 ===== */
+.metrics-kpi-table{
+  min-width:590px;
+}
+
+.metrics-kpi-table th:nth-child(1),
+.metrics-kpi-table td:nth-child(1){
+  width:118px;
+  min-width:118px;
+  max-width:118px;
+}
+
+.metrics-kpi-table th:nth-child(2),
+.metrics-kpi-table td:nth-child(2){
+  width:88px;
+  min-width:88px;
+}
+
+.metrics-kpi-table th:nth-child(3),
+.metrics-kpi-table td:nth-child(3){
+  width:78px;
+  min-width:78px;
+}
+
+.metrics-kpi-table th:nth-child(4),
+.metrics-kpi-table td:nth-child(4){
+  width:128px;
+  min-width:128px;
+}
+
+.metrics-kpi-table th:nth-child(5),
+.metrics-kpi-table td:nth-child(5){
+  width:130px;
+  min-width:130px;
+}
+
+.metrics-kpi-table th,
+.metrics-kpi-table td{
+  padding-left:6px;
+  padding-right:6px;
+}
+
+.metrics-diff-badge{
+  min-width:74px;
+  padding-left:6px;
+  padding-right:6px;
+}
+
+@media(max-width:980px){
+  .metrics-kpi-table{
+    min-width:570px;
+  }
+
+  .metrics-kpi-table th:nth-child(1),
+  .metrics-kpi-table td:nth-child(1){
+    width:108px;
+    min-width:108px;
+    max-width:108px;
+    padding-left:6px;
+    padding-right:4px;
+  }
+
+  .metrics-kpi-table th:nth-child(2),
+  .metrics-kpi-table td:nth-child(2){
+    width:82px;
+    min-width:82px;
+  }
+
+  .metrics-kpi-table th:nth-child(3),
+  .metrics-kpi-table td:nth-child(3){
+    width:68px;
+    min-width:68px;
+  }
+
+  .metrics-kpi-table th:nth-child(4),
+  .metrics-kpi-table td:nth-child(4){
+    width:118px;
+    min-width:118px;
+  }
+
+  .metrics-kpi-table th:nth-child(5),
+  .metrics-kpi-table td:nth-child(5){
+    width:126px;
+    min-width:126px;
+  }
+
+  .metrics-kpi-table th,
+  .metrics-kpi-table td{
+    padding-left:4px;
+    padding-right:4px;
+    font-size:13px;
+  }
+
+  .metrics-kpi-table th{
+    font-size:11px;
+  }
+
+  .metrics-diff-badge{
+    min-width:68px;
+    padding-left:4px;
+    padding-right:4px;
+    font-size:11px;
+  }
+
+  .metrics-kpi-rank{
+    min-width:40px;
+    padding-left:4px;
+    padding-right:4px;
+    font-size:12px;
+  }
+}
+
+@media(max-width:380px){
+  .metrics-kpi-table{
+    min-width:548px;
+  }
+
+  .metrics-kpi-table th:nth-child(1),
+  .metrics-kpi-table td:nth-child(1){
+    width:100px;
+    min-width:100px;
+    max-width:100px;
+  }
+
+  .metrics-kpi-table th:nth-child(2),
+  .metrics-kpi-table td:nth-child(2){
+    width:78px;
+    min-width:78px;
+  }
+
+  .metrics-kpi-table th:nth-child(3),
+  .metrics-kpi-table td:nth-child(3){
+    width:64px;
+    min-width:64px;
+  }
+
+  .metrics-kpi-table th:nth-child(4),
+  .metrics-kpi-table td:nth-child(4){
+    width:112px;
+    min-width:112px;
+  }
+}
+
 </style>
 </head>
 
